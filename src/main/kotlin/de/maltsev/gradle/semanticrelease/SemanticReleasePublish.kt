@@ -1,11 +1,13 @@
 package de.maltsev.gradle.semanticrelease
 
+import arrow.core.Option
 import arrow.core.Some
 import arrow.core.getOrElse
 import de.maltsev.gradle.semanticrelease.ci.CITool
 import de.maltsev.gradle.semanticrelease.extensions.lazy
 import de.maltsev.gradle.semanticrelease.releasenotes.MarkdownReleaseNotesGenerator
 import de.maltsev.gradle.semanticrelease.vcs.VCSSource
+import de.maltsev.gradle.semanticrelease.versions.SemanticVersion
 import org.gradle.api.DefaultTask
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
@@ -31,14 +33,17 @@ open class SemanticReleasePublish : DefaultTask() {
         when (latestVersionContext) {
             is Some -> when (nextVersion) {
                 is Some -> {
-                    logger.lifecycle("Generating release notes for ${nextVersion.t}.")
-                    val changes = latestVersionContext.map { it.changes }.getOrElse { emptyList() }
-                    val releaseNotes = MarkdownReleaseNotesGenerator.generate(nextVersion.t, changes)
-                    logger.quiet("Release notes:\n$releaseNotes.")
-                    logger.lifecycle("Publishing release for $releaseNotes.")
-                    vcsSource.get().publishRelease(nextVersion.t, releaseNotes)
+                    publishRelease(nextVersion, latestVersionContext)
                 }
             }
         }
+    }
+
+    private fun publishRelease(nextVersion: Some<SemanticVersion>, latestVersionContext: Option<VersionContext>) {
+        logger.lifecycle("Generating release notes for ${nextVersion.t}.")
+        val changes = latestVersionContext.map { it.changes }.getOrElse { emptyList() }
+        val releaseNotes = MarkdownReleaseNotesGenerator.generate(nextVersion.t, changes)
+        logger.quiet("Release notes:\n$releaseNotes.")
+        vcsSource.get().publishRelease(nextVersion.t, releaseNotes)
     }
 }

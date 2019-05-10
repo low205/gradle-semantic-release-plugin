@@ -8,7 +8,6 @@ import arrow.core.toOption
 import de.maltsev.gradle.semanticrelease.ci.CITool
 import de.maltsev.gradle.semanticrelease.extensions.SemanticVersionPattern
 import de.maltsev.gradle.semanticrelease.extensions.lazy
-import de.maltsev.gradle.semanticrelease.releasenotes.MarkdownReleaseNotesGenerator
 import de.maltsev.gradle.semanticrelease.vcs.VCSSource
 import de.maltsev.gradle.semanticrelease.vcs.VcsCommit
 import de.maltsev.gradle.semanticrelease.versions.SemanticStrategy
@@ -39,9 +38,11 @@ open class SemanticReleaseVersion : DefaultTask() {
     @Internal
     val semanticVersionPattern: Property<SemanticVersionPattern> = project.lazy()
 
+    @Internal
     private var latestVersionContext: Option<VersionContext> = None
 
-    private var nextVersion: SemanticVersion? = null
+    @Internal
+    private lateinit var nextVersion: SemanticVersion
 
     fun getLatestVersionContext(): Option<VersionContext> {
         return latestVersionContext
@@ -63,7 +64,7 @@ open class SemanticReleaseVersion : DefaultTask() {
 
         val latestVersion = latestVersionContext.map { it.latestVersion }.getOrElse { null }
 
-        if (latestVersion == null || latestVersion == nextVersion || (ciTool.get().isStage() && !inferStaged.get())) {
+        if (latestVersion == nextVersion || (ciTool.get().isStage() && !inferStaged.get())) {
             logger.lifecycle("No next version.")
         } else {
             logger.lifecycle("Next semantic version: $nextVersion.")

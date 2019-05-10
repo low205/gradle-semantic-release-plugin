@@ -36,12 +36,6 @@ dependencies {
     "implementation"("com.github.kittinunf.fuel:fuel:$fuelVersion")
     "implementation"("com.github.kittinunf.fuel:fuel-jackson:$fuelVersion")
     "implementation"("io.arrow-kt:arrow-core:$arrowVersion")
-//    "implementation"("io.arrow-kt:arrow-syntax:$arrowVersion")
-//    "implementation"("io.arrow-kt:arrow-typeclasses:$arrowVersion")
-//    "implementation"("io.arrow-kt:arrow-data:$arrowVersion")
-//    "implementation"("io.arrow-kt:arrow-instances-core:$arrowVersion")
-//    "implementation"("io.arrow-kt:arrow-instances-data:$arrowVersion")
-//    "kapt"("io.arrow-kt:arrow-annotations-processor:$arrowVersion")
 
     "testImplementation"("io.mockk:mockk:$mockkVersion")
     "testImplementation"("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
