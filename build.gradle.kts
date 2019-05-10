@@ -1,5 +1,7 @@
+import com.jfrog.bintray.gradle.BintrayExtension
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import java.time.LocalDate
 
 plugins {
     `java-gradle-plugin`
@@ -112,5 +114,36 @@ publishing {
                 appendNode("scm").appendNode("url", "https://github.com/low205/gradle-semantic-release-plugin")
             }
         }
+    }
+}
+
+bintray {
+    user = System.getenv("BINTRAY_USER") ?: ""
+    key = System.getenv("BINTRAY_API_KEY") ?: ""
+    setPublications("SemanticReleasePublication")
+    pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
+        repo = "gradle-plugins"
+        name = "semantic-release"
+        userOrg = "low205"
+        vcsUrl = "https://github.com/low205/gradle-semantic-release-plugin"
+        version(delegateClosureOf<BintrayExtension.VersionConfig> {
+            name = project.version as? String
+            released = LocalDate.now().toString()
+
+            gpg(delegateClosureOf<BintrayExtension.GpgConfig> {
+                sign = true
+            })
+        })
+    })
+}
+
+tasks {
+    "bintrayUpload" {
+//        dependsOn("semanticReleasePublish")
+        onlyIf { version != "unspecified" }
+    }
+    "publishPlugins" {
+        //        dependsOn("semanticReleasePublish")
+        onlyIf { version != "unspecified" }
     }
 }
