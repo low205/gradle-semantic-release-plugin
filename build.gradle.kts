@@ -1,7 +1,7 @@
 import com.jfrog.bintray.gradle.BintrayExtension
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import java.time.LocalDate
+import java.util.Date
 
 plugins {
     `java-gradle-plugin`
@@ -118,17 +118,17 @@ publishing {
 }
 
 bintray {
-    user = System.getenv("BINTRAY_USER") ?: ""
-    key = System.getenv("BINTRAY_API_KEY") ?: ""
+    user = System.getenv("BINTRAY_USER") ?: "low205"
+    key = System.getenv("BINTRAY_API_KEY") ?: "7110cbd9e6316cef26f556341c85efd1b394d6e1"
     setPublications("SemanticReleasePublication")
     pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
         repo = "gradle-plugins"
-        name = "semantic-release"
+        name = "gradle-semantic-release-plugin"
         userOrg = "low205"
         vcsUrl = "https://github.com/low205/gradle-semantic-release-plugin"
         version(delegateClosureOf<BintrayExtension.VersionConfig> {
             name = project.version as? String
-            released = LocalDate.now().toString()
+            released = Date().toString()
 
             gpg(delegateClosureOf<BintrayExtension.GpgConfig> {
                 sign = true
