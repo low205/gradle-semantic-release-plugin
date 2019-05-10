@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/low205/gradle-semantic-release-plugin.svg?branch=master)](https://travis-ci.org/low205/gradle-semantic-release-plugin)
 # gradle-semantic-release-plugin
 
 This is a very simple semantic release plugin for projects which use *GitHub* and *Travis*.
