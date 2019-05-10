@@ -118,13 +118,15 @@ publishing {
 }
 
 bintray {
-    user = System.getenv("BINTRAY_USER") ?: "low205"
-    key = System.getenv("BINTRAY_API_KEY") ?: "7110cbd9e6316cef26f556341c85efd1b394d6e1"
+    user = System.getenv("BINTRAY_USER") ?: ""
+    key = System.getenv("BINTRAY_API_KEY") ?: ""
     setPublications("SemanticReleasePublication")
+    override = true
     pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
         repo = "gradle-plugins"
         name = "gradle-semantic-release-plugin"
         userOrg = "low205"
+        setLicenses("Apache-2.0", "MIT")
         vcsUrl = "https://github.com/low205/gradle-semantic-release-plugin"
         version(delegateClosureOf<BintrayExtension.VersionConfig> {
             name = project.version as? String
