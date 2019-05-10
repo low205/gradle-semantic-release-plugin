@@ -11,7 +11,7 @@ plugins {
     id("com.jfrog.bintray")
 }
 
-group = "de.maltsev"
+group = "de.maltsev.gradle.semanticrelease"
 version = "0.1.0"
 
 gradlePlugin {
