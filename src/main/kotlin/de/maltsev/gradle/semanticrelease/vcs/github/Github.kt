@@ -22,9 +22,9 @@ class Github(private val ciTool: CITool, environment: Environment = SystemEnviro
 
     override fun publishRelease(nextVersion: SemanticVersion, releaseNotes: String) {
         val release = GitHubRelease(
-            tagName = nextVersion.toString(),
+            tagName = nextVersion.toVcsString(),
             branch = ciTool.currentBranchName(),
-            name = nextVersion.toString(),
+            name = nextVersion.toVcsString(),
             body = releaseNotes
         )
 

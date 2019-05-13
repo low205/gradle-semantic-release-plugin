@@ -39,9 +39,11 @@ data class SemanticVersion(
     fun staged() = stage is Some
 
     override fun toString() = when (stage) {
-        is Some -> "$prefix$major.$minor.$patch-${stage.t.name}.${stage.t.commit}"
-        is None -> "$prefix$major.$minor.$patch"
+        is Some -> "$major.$minor.$patch-${stage.t.name}.${stage.t.commit}"
+        is None -> "$major.$minor.$patch"
     }
+
+    fun toVcsString() = "$prefix${toString()}"
 
     fun withStageAt(stage: Stage): SemanticVersion {
         return this.copy(stage = Some(stage))
