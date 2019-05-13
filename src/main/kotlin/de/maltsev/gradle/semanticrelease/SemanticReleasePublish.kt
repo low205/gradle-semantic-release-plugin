@@ -3,6 +3,7 @@ package de.maltsev.gradle.semanticrelease
 import arrow.core.Option
 import arrow.core.Some
 import arrow.core.getOrElse
+import de.maltsev.gradle.semanticrelease.SemanticReleasePlugin.Companion.SEMANTIC_VERSION
 import de.maltsev.gradle.semanticrelease.ci.CITool
 import de.maltsev.gradle.semanticrelease.extensions.lazy
 import de.maltsev.gradle.semanticrelease.releasenotes.MarkdownReleaseNotesGenerator
@@ -23,7 +24,7 @@ open class SemanticReleasePublish : DefaultTask() {
 
     @TaskAction
     fun action() {
-        val releaseTask = project.tasks.named("release", SemanticReleaseVersion::class.java).get()
+        val releaseTask = project.tasks.named(SEMANTIC_VERSION, SemanticReleaseVersion::class.java).get()
         val latestVersionContext = releaseTask.getLatestVersionContext()
         val nextVersion = releaseTask.getNextVersion()
         if (ciTool.get().isStage()) {

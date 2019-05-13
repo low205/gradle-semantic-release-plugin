@@ -62,7 +62,7 @@ class SemanticReleasePlugin : Plugin<Project> {
     }
 
     companion object {
-        private const val SEMANTIC_VERSION = "semanticReleaseVersion"
+        const val SEMANTIC_VERSION = "semanticReleaseVersion"
         private const val SEMANTIC_PUBLISH = "semanticReleasePublish"
     }
 }
