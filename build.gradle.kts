@@ -1,4 +1,5 @@
 import com.jfrog.bintray.gradle.BintrayExtension
+import com.jfrog.bintray.gradle.tasks.BintrayUploadTask
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import java.util.Date
@@ -138,9 +139,13 @@ bintray {
 }
 
 tasks {
-    "bintrayUpload" {
+    "bintrayUpload"(BintrayUploadTask::class) {
+        val task = this
         dependsOn("semanticReleasePublish")
         onlyIf { version != "unspecified" }
+        doFirst {
+            task.extension.pkg.version.name = project.version as String
+        }
     }
     "publishPlugins" {
         dependsOn("semanticReleasePublish")
