@@ -1,6 +1,9 @@
 import com.jfrog.bintray.gradle.BintrayExtension
+import groovy.xml.dom.DOMCategory.appendNode
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.gradle.internal.impldep.com.amazonaws.util.XpathUtils.asNode
+import org.jetbrains.kotlin.serialization.js.DynamicTypeDeserializer.id
 import java.util.Date
 
 plugins {
@@ -141,11 +144,11 @@ bintray {
 
 tasks {
     "bintrayUpload" {
-//        dependsOn("semanticReleasePublish")
+        dependsOn("semanticReleasePublish")
         onlyIf { version != "unspecified" }
     }
     "publishPlugins" {
-        //        dependsOn("semanticReleasePublish")
+        dependsOn("semanticReleasePublish")
         onlyIf { version != "unspecified" }
     }
 }

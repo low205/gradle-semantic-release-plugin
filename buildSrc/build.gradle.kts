@@ -17,6 +17,7 @@ val detektVersion: String by extra
 val gradlePublishVersion: String by extra
 val dokkaVersion: String by extra
 val bintrayVersion: String by extra
+val semanticReleaseVersion: String by extra
 
 dependencies {
     compile(kotlin("gradle-plugin", version = kotlinVersion))
@@ -26,4 +27,5 @@ dependencies {
     compile("com.gradle.publish:plugin-publish-plugin:$gradlePublishVersion")
     compile("org.jetbrains.dokka:dokka-gradle-plugin:$dokkaVersion")
     compile("com.jfrog.bintray.gradle:gradle-bintray-plugin:$bintrayVersion")
+    compile("de.maltsev.gradle.semanticrelease:gradle-semantic-release-plugin:$semanticReleaseVersion")
 }
