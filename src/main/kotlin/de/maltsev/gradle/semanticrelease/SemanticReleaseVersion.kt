@@ -42,7 +42,7 @@ open class SemanticReleaseVersion : DefaultTask() {
     private var latestVersionContext: Option<VersionContext> = None
 
     @Internal
-    private lateinit var nextVersion: SemanticVersion
+    private var nextVersion: SemanticVersion? = null
 
     fun getLatestVersionContext(): Option<VersionContext> {
         return latestVersionContext
@@ -66,6 +66,7 @@ open class SemanticReleaseVersion : DefaultTask() {
 
         if (latestVersion == nextVersion || (ciTool.get().isStage() && !inferStaged.get())) {
             logger.lifecycle("No next version.")
+            nextVersion = null
         } else {
             logger.lifecycle("Next semantic version: $nextVersion.")
             project.version = nextVersion.toString()
