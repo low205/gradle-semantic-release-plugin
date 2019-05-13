@@ -16,7 +16,7 @@ plugins {
 group = "de.maltsev.gradle.semanticrelease"
 
 if (file(".version").canRead()) {
-    version = file(".version").readText()
+    version = file(".version").readText().removePrefix("v")
 }
 
 gradlePlugin {
