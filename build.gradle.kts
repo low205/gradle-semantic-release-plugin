@@ -9,10 +9,10 @@ plugins {
     `common-library`
     id("com.gradle.plugin-publish")
     id("com.jfrog.bintray")
+    id ("de.maltsev.gradle.semanticrelease")
 }
 
 group = "de.maltsev.gradle.semanticrelease"
-version = "0.1.0"
 
 gradlePlugin {
     plugins {
