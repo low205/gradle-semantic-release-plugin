@@ -15,6 +15,10 @@ plugins {
 
 group = "de.maltsev.gradle.semanticrelease"
 
+if (file(".version").canRead()) {
+    version = file(".version").readText()
+}
+
 gradlePlugin {
     plugins {
         create("semanticReleasePlugin") {
@@ -125,7 +129,7 @@ bintray {
         repo = "gradle-plugins"
         name = "gradle-semantic-release-plugin"
         userOrg = "low205"
-        setLicenses("Apache-2.0", "MIT")
+        setLicenses("MIT")
         vcsUrl = "https://github.com/low205/gradle-semantic-release-plugin"
         version(delegateClosureOf<BintrayExtension.VersionConfig> {
             name = project.version as? String
@@ -139,16 +143,19 @@ bintray {
 }
 
 tasks {
-    "bintrayUpload"(BintrayUploadTask::class) {
-        val task = this
-        dependsOn("semanticReleasePublish")
-        onlyIf { version != "unspecified" }
-        doFirst {
-            task.extension.pkg.version.name = project.version as String
+    create("makeVersionFile") {
+        dependsOn("semanticReleaseVersion")
+        val versionFile = file(".version")
+        doLast {
+            versionFile.delete()
+            versionFile.writeText(project.version as String)
         }
+        onlyIf { project.version != "unspecified" }
+    }
+    "bintrayUpload"(BintrayUploadTask::class) {
+        onlyIf { version != "unspecified" }
     }
     "publishPlugins" {
-        dependsOn("semanticReleasePublish")
         onlyIf { version != "unspecified" }
     }
 }
