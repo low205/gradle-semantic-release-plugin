@@ -13,11 +13,7 @@ plugins {
     id("de.maltsev.gradle.semanticrelease")
 }
 
-group = "de.maltsev.gradle.semanticrelease"
-
-if (file(".version").canRead()) {
-    version = file(".version").readText().removePrefix("v")
-}
+group = "de.maltsev"
 
 gradlePlugin {
     plugins {
@@ -95,9 +91,9 @@ publishing {
         from(components["java"])
         artifact(sourcesJar)
         artifact(javadocJar)
-        groupId = rootProject.group as? String
+        groupId = rootProject.group.toString()
         artifactId = rootProject.name
-        version = rootProject.version as? String
+        version = rootProject.version.toString()
         pom.withXml {
             asNode().apply {
                 appendNode("description", "Gradle semantic release plugin")
@@ -132,7 +128,7 @@ bintray {
         setLicenses("MIT")
         vcsUrl = "https://github.com/low205/gradle-semantic-release-plugin"
         version(delegateClosureOf<BintrayExtension.VersionConfig> {
-            name = project.version as? String
+            name = project.version.toString()
             released = Date().toString()
 
             gpg(delegateClosureOf<BintrayExtension.GpgConfig> {
@@ -143,19 +139,10 @@ bintray {
 }
 
 tasks {
-    create("makeVersionFile") {
-        dependsOn("semanticReleaseVersion")
-        val versionFile = file(".version")
-        doLast {
-            versionFile.delete()
-            versionFile.writeText(project.version as String)
-        }
-        onlyIf { project.version != "unspecified" }
-    }
     "bintrayUpload"(BintrayUploadTask::class) {
-        onlyIf { version != "unspecified" }
+        onlyIf { version != "unspecified" && project.hasProperty("semanticVersion")}
     }
     "publishPlugins" {
-        onlyIf { version != "unspecified" }
+        onlyIf { version != "unspecified" && project.hasProperty("semanticVersion")}
     }
 }

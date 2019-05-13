@@ -27,5 +27,5 @@ dependencies {
     compile("com.gradle.publish:plugin-publish-plugin:$gradlePublishVersion")
     compile("org.jetbrains.dokka:dokka-gradle-plugin:$dokkaVersion")
     compile("com.jfrog.bintray.gradle:gradle-bintray-plugin:$bintrayVersion")
-    compile("de.maltsev.gradle.semanticrelease:gradle-semantic-release-plugin:$semanticReleaseVersion")
+    compile("de.maltsev:gradle-semantic-release-plugin:$semanticReleaseVersion")
 }
