@@ -53,8 +53,8 @@ class SemanticReleasePlugin : Plugin<Project> {
         } else {
             project.logger.lifecycle("Next semantic version: $nextVersion.")
             project.version = nextVersion
-            project.setProperty("latestVersionContext", latestVersionContext)
-            project.setProperty("semanticVersion", nextVersion)
+            project.extensions.extraProperties["latestVersionContext"] = latestVersionContext
+            project.extensions.extraProperties["semanticVersion"] = nextVersion
         }
     }
 
