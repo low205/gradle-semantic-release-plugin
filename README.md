@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/low205/gradle-semantic-release-plugin.svg?branch=master)](https://travis-ci.org/low205/gradle-semantic-release-plugin)
-[![Download](https://api.bintray.com/packages/low205/gradle-plugins/gradle-semantic-release-plugin/images/download.svg?version=0.1.0) ](https://bintray.com/low205/gradle-plugins/gradle-semantic-release-plugin/0.1.0/link)
+[ ![Download](https://api.bintray.com/packages/low205/gradle-plugins/gradle-semantic-release-plugin/images/download.svg) ](https://bintray.com/low205/gradle-plugins/gradle-semantic-release-plugin/_latestVersion)
 # gradle-semantic-release-plugin
 
 This is a very simple semantic release plugin for projects which use *GitHub* and *Travis*.
@@ -20,15 +20,24 @@ _Source: [semantic-release/semantic-release#how-does-it-work](https://github.com
 * apply plugin:
     ```
     plugins {
-        id("de.maltsev.gradle.semanticrelease") version "0.1.0"
+        id("de.maltsev.gradle.semanticrelease") version "[version]"
     }
     ```
 * configure your Travis build to have GITHUB_TOKEN, which is OAuth token with access to your repository
 * remove from your gradle build code which sets `version`
-* run `semanticReleasePublish` task. 
-    * It will run `semanticReleaseVersion` task. It will read your last release from GitHub and will prepare list of changes based on commit messages happened after you last release.
-    * If you on master it will create release and publish it to GitHub
-    * If you on any other branch it will only infer version with `-<branchName>.<commitNumber>` suffix. 
-    * If version did not changed, version will not be set
-    * If version was not found, it will create release from all commits with `v0.1.0` tag name.
-    * If you want to start from some specific version, just create release manually with proper semantic version
+* now your current version and next version will be inferred automatically by computing next version based on commits happened after latest release 
+* your version will be a class of type SemanticVersion, toString() of which will return semantic version without prefix
+* version will be always inferred, you can check that you will have new version buy checking `project.hasProperty("semanticVersion")`
+* run task `semanticReleasePublish` to publish new release on GitHub. 
+* versions will start from 'v0.1.0' or just create first release manually with needed semantic version
+* you can use these additional prefixes for release notes groups, all other commits and prefixes will land in `Others`:
+
+    | Prefix   | Group name               |
+    |----------|--------------------------|
+    | perf     | Performance Improvements |
+    | revert   | Reverts                  |
+    | docs     | Documentation            |
+    | style    | Style                    |
+    | refactor | Code Refactoring         |
+    | test     | Tests                    |
+    | chore    | Chores                   |
