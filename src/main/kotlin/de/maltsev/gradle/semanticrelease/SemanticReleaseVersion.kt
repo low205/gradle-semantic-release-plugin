@@ -58,8 +58,8 @@ open class SemanticReleaseVersion : DefaultTask() {
         nextVersion = nextVersion(latestVersionContext)
 
         when (val context = latestVersionContext) {
-            is Some -> logger.info("Current version from vcs: $${context.t.latestVersion}")
-            is None -> logger.info("No current version found in vcs. Next version will be set to default: $nextVersion")
+            is Some -> logger.lifecycle("Current version from vcs: $${context.t.latestVersion}")
+            is None -> logger.lifecycle("No current version found in vcs. Next version will be set to default: $nextVersion")
         }
 
         val latestVersion = latestVersionContext.map { it.latestVersion }.getOrElse { null }

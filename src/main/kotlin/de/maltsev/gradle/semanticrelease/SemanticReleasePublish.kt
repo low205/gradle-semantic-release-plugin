@@ -25,26 +25,24 @@ open class SemanticReleasePublish : DefaultTask() {
     @TaskAction
     fun action() {
         val releaseTask = project.tasks.named(SEMANTIC_VERSION, SemanticReleaseVersion::class.java).get()
-        val latestVersionContext = releaseTask.getLatestVersionContext()
-        val nextVersion = releaseTask.getNextVersion()
+        val latestVersionContext: Option<VersionContext> = releaseTask.getLatestVersionContext()
+        val nextVersion: Option<SemanticVersion> = releaseTask.getNextVersion()
         if (ciTool.get().isStage()) {
             return
         }
 
-        when (latestVersionContext) {
-            is Some -> when (nextVersion) {
-                is Some -> {
-                    publishRelease(nextVersion, latestVersionContext)
-                }
+        when (nextVersion) {
+            is Some -> {
+                logger.lifecycle("Publishing version ${nextVersion.t}.")
+                publishRelease(nextVersion.t, latestVersionContext)
             }
         }
     }
 
-    private fun publishRelease(nextVersion: Some<SemanticVersion>, latestVersionContext: Option<VersionContext>) {
-        logger.lifecycle("Generating release notes for ${nextVersion.t}.")
+    private fun publishRelease(nextVersion: SemanticVersion, latestVersionContext: Option<VersionContext>) {
         val changes = latestVersionContext.map { it.changes }.getOrElse { emptyList() }
-        val releaseNotes = MarkdownReleaseNotesGenerator.generate(nextVersion.t, changes)
-        logger.quiet("Release notes:\n$releaseNotes.")
-        vcsSource.get().publishRelease(nextVersion.t, releaseNotes)
+        val releaseNotes = MarkdownReleaseNotesGenerator.generate(nextVersion, changes)
+        logger.lifecycle("Release notes:\n$releaseNotes.")
+        vcsSource.get().publishRelease(nextVersion, releaseNotes)
     }
 }
