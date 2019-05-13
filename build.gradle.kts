@@ -1,9 +1,6 @@
 import com.jfrog.bintray.gradle.BintrayExtension
-import groovy.xml.dom.DOMCategory.appendNode
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.gradle.internal.impldep.com.amazonaws.util.XpathUtils.asNode
-import org.jetbrains.kotlin.serialization.js.DynamicTypeDeserializer.id
 import java.util.Date
 
 plugins {
@@ -12,7 +9,7 @@ plugins {
     `common-library`
     id("com.gradle.plugin-publish")
     id("com.jfrog.bintray")
-    id ("de.maltsev.gradle.semanticrelease")
+    id("de.maltsev.gradle.semanticrelease")
 }
 
 group = "de.maltsev.gradle.semanticrelease"
@@ -64,8 +61,6 @@ pluginBundle {
 }
 
 tasks.dokka {
-    // suppresses undocumented classes but not dokka warnings
-    // https://github.com/Kotlin/dokka/issues/229 && https://github.com/Kotlin/dokka/issues/319
     reportUndocumented = false
     outputFormat = "javadoc"
     outputDirectory = "$buildDir/javadoc"
