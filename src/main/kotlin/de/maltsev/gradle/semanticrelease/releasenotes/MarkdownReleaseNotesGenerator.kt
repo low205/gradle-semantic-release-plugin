@@ -9,9 +9,10 @@ object MarkdownReleaseNotesGenerator {
         val releaseNotes = StringBuilder("## $version (${LocalDate.now()})")
 
         val changesText = changes
-            .groupBy { it.name }
+            .groupBy { it.group }
+            .toSortedMap()
             .map { (changeName, commits) ->
-                "#### $changeName \n\n${commits.joinToString("\n", transform = GenericMarkdownFormatter::asMarkdown)}"
+                "#### $changeName\n\n${commits.joinToString("\n", transform = GenericMarkdownFormatter::asMarkdown)}"
             }.joinToString("\n\n")
 
         return if (changesText.isEmpty()) {

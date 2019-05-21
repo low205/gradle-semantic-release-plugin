@@ -20,6 +20,7 @@ open class SemanticReleasePublish : DefaultTask() {
     @Input
     val ciTool: Property<CITool> = project.lazy()
 
+    @Suppress("UNCHECKED_CAST")
     @TaskAction
     fun action() {
         val latestVersionContext: Option<VersionContext> = project.property("latestVersionContext") as Option<VersionContext>

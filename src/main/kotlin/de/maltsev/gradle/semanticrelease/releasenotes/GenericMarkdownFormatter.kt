@@ -8,11 +8,11 @@ import de.maltsev.gradle.semanticrelease.versions.VersionChange
 object GenericMarkdownFormatter {
     fun asMarkdown(versionChange: VersionChange): String {
         val descriptor = versionChange.descriptor
-        val subType = when (val optionalSubtype: Option<String> = descriptor.subType.map { "**$it:**" }) {
+        val subType = when (val optionalSubtype: Option<String> = descriptor.subType.map { "**$it**:" }) {
             is Some -> optionalSubtype.t
             is None -> ""
         }
-        val breakingChangeMessage = when (val optionalBreakingMessage: Option<String> = descriptor.breakingChangeMessage.map { "\n\t BREAKING CHANGE: $it" }) {
+        val breakingChangeMessage = when (val optionalBreakingMessage: Option<String> = descriptor.breakingChangeMessage.map { "\n\t```BREAKING CHANGE: $it```" }) {
             is Some -> optionalBreakingMessage.t
             is None -> ""
         }

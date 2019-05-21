@@ -17,11 +17,11 @@ class SemanticCommitStrategy(private val otherTypes: Map<String, String>) : Sema
                 when (descriptor.type.t) {
                     MinorChange.TYPE -> MinorChange(descriptor, source.id)
                     PatchChange.TYPE -> PatchChange(descriptor, source.id)
-                    else -> NonSemanticChange(descriptor, source.id, otherTypes)
+                    else -> VersionChange.of(descriptor, source.id, descriptor.type.t)
                 }
             }
             is None -> {
-                NonSemanticChange(descriptor, source.id)
+                VersionChange.of(descriptor, source.id, "none")
             }
         }
     }
