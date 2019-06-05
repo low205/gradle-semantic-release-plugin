@@ -47,6 +47,10 @@ class SemanticReleasePlugin : Plugin<Project> {
 
         if (latestVersion == nextVersion) {
             project.logger.lifecycle("No next version.")
+            project.version = latestVersion
+            project.subprojects {
+                it.version = latestVersion
+            }
         } else {
             project.logger.lifecycle("Next semantic version: $nextVersion.")
             project.version = nextVersion
