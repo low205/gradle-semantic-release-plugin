@@ -11,8 +11,8 @@ data class SemanticVersion(
     val patch: Int,
     val stage: Option<Stage> = None
 ) {
-    private fun nextMajor(): SemanticVersion = this.copy(major = major + 1)
-    private fun nextMinor(): SemanticVersion = this.copy(minor = minor + 1)
+    private fun nextMajor(): SemanticVersion = this.copy(major = major + 1, minor = 0, patch = 0)
+    private fun nextMinor(): SemanticVersion = this.copy(minor = minor + 1, patch = 0)
     private fun nextPatch(): SemanticVersion = this.copy(patch = patch + 1)
     private fun nextStage(count: Int): SemanticVersion = this.copy(stage = stage.map { it.copy(commit = it.commit + count) })
 
