@@ -45,14 +45,8 @@ class SemanticReleasePlugin : Plugin<Project> {
 
         val latestVersion = latestVersionContext.map { it.latestVersion }.getOrElse { null }
 
-        if (latestVersion == nextVersion || (travis.isStage())) {
+        if (latestVersion == nextVersion) {
             project.logger.lifecycle("No next version.")
-            if (latestVersion != null) {
-                project.version = latestVersion
-                project.subprojects {
-                    it.version = latestVersion
-                }
-            }
         } else {
             project.logger.lifecycle("Next semantic version: $nextVersion.")
             project.version = nextVersion
@@ -86,7 +80,7 @@ class SemanticReleasePlugin : Plugin<Project> {
                     .withStageAt(
                         SemanticVersion.Stage(
                             name = ciTool.currentBranchName(),
-                            commit = latestVersionContext.t.commits.count())
+                            commit = changes.count())
                     )
                 else -> latestVersion.nextVersion(changes)
             }
