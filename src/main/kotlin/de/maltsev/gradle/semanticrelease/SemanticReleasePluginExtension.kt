@@ -5,7 +5,7 @@ import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 
-class SemanticReleasePluginExtension(
+open class SemanticReleasePluginExtension(
     objectFactory: ObjectFactory
 ) {
     val targetBranch: Property<String> = objectFactory.lazyWith("master")
