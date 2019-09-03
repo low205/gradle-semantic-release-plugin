@@ -1,6 +1,6 @@
 package de.maltsev.gradle.semanticrelease.vcs.github
 
-data class TagsResponse(
+internal data class TagsResponse(
     val data: Data? = null
 ) : BaseResponse() {
     data class Data(
@@ -21,7 +21,8 @@ data class TagsResponse(
                     val target: Target
                 ) {
                     data class Target(
-                        val oid: String
+                        val oid: String,
+                        val abbreviatedOid: String
                     )
                 }
             }

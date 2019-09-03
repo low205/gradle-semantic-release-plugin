@@ -3,7 +3,7 @@ package de.maltsev.gradle.semanticrelease.vcs.github
 import de.maltsev.gradle.semanticrelease.vcs.VcsCommit
 import de.maltsev.gradle.semanticrelease.vcs.VcsCommitId
 
-data class CommitResponse(
+internal data class CommitResponse(
     val data: Data? = null
 ) : BaseResponse() {
     fun hasMoreCommits(): Boolean {
@@ -16,7 +16,7 @@ data class CommitResponse(
         get() = checkNotNull(data?.repository?.ref?.target?.history?.pageInfo?.endCursor) { "No endCursor is found" }
 
     val commits: List<VcsCommit>
-        get() = data?.repository?.ref?.target?.history?.edges?.map { VcsCommit(VcsCommitId(it.node.oid), it.node.message) }
+        get() = data?.repository?.ref?.target?.history?.edges?.map { VcsCommit(VcsCommitId(it.node.oid, it.node.abbreviatedOid), it.node.message) }
             ?: emptyList()
 
     data class Data(
@@ -47,6 +47,7 @@ data class CommitResponse(
                     ) {
                         data class Node(
                             val oid: String,
+                            val abbreviatedOid: String,
                             val message: String
                         )
                     }

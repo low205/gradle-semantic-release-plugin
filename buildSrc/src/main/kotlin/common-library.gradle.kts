@@ -12,7 +12,6 @@ plugins {
 repositories {
     mavenCentral()
     jcenter()
-    gradlePluginPortal()
 }
 
 apply {
@@ -27,20 +26,24 @@ val kotlinTestVersion: String by extra
 val arrowVersion: String by extra
 val ktlintVersion: String by extra
 val fuelVersion: String by extra
+val arrowCoreExtVersion: String by extra
+val jacksonVersion: String by extra
 
 dependencies {
-    "implementation"(kotlin("stdlib-jdk8", kotlinVersion))
-    "implementation"(kotlin("stdlib-jdk7", kotlinVersion))
-    "implementation"(kotlin("stdlib", kotlinVersion))
-    "implementation"(kotlin("reflect", kotlinVersion))
-    "implementation"("com.github.kittinunf.fuel:fuel:$fuelVersion")
-    "implementation"("com.github.kittinunf.fuel:fuel-jackson:$fuelVersion")
-    "implementation"("io.arrow-kt:arrow-core:$arrowVersion")
+    api(kotlin("stdlib-jdk8", kotlinVersion))
+    api(kotlin("stdlib-jdk7", kotlinVersion))
+    api(kotlin("stdlib", kotlinVersion))
+    api(kotlin("reflect", kotlinVersion))
+    implementation("com.github.kittinunf.fuel:fuel:$fuelVersion")
+    implementation("com.github.kittinunf.fuel:fuel-jackson:$fuelVersion")
+    api("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+    api("io.arrow-kt:arrow-core:$arrowVersion")
+    api("io.arrow-kt:arrow-core-extensions:$arrowCoreExtVersion")
 
-    "testImplementation"("io.mockk:mockk:$mockkVersion")
-    "testImplementation"("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
-    "testImplementation"("io.kotlintest:kotlintest-assertions:$kotlinTestVersion")
-    "testImplementation"("io.kotlintest:kotlintest-assertions-arrow:$kotlinTestVersion")
+    testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
+    testImplementation("io.kotlintest:kotlintest-assertions:$kotlinTestVersion")
+    testImplementation("io.kotlintest:kotlintest-assertions-arrow:$kotlinTestVersion")
 
     ktlint("com.github.shyiko:ktlint:$ktlintVersion")
 }

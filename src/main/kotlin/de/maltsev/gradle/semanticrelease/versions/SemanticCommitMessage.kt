@@ -1,9 +1,9 @@
-package de.maltsev.gradle.semanticrelease.vcs
+package de.maltsev.gradle.semanticrelease.versions
 
 import arrow.core.None
 import arrow.core.Option
 
-data class CommitMessageDescriptor(
+data class SemanticCommitMessage(
     val message: String = "",
     val type: Option<String> = None,
     val subType: Option<String> = None,

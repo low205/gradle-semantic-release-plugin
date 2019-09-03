@@ -13,7 +13,8 @@ class GithubClient(
     repositoryName: String,
     branch: String
 ) {
-    private val releasesUrl: String = "$baseUrl/repos/$repositoryOwner/$repositoryName/releases"
+    private val repoUrl: String = "$baseUrl/repos/$repositoryOwner/$repositoryName"
+    private val releasesUrl: String = "$repoUrl/releases"
 
     private val baseCommitParameters = mapOf(
         "owner" to repositoryOwner,
@@ -30,7 +31,14 @@ class GithubClient(
         )
     )
 
-    fun publishRelease(release: GitHubRelease) {
+    fun publishRelease(branch: String, version: String, releaseNotes: String) {
+        val release = GitHubRelease(
+            tagName = version,
+            branch = branch,
+            name = version,
+            body = releaseNotes
+        )
+
         val (_, response, result) = releasesUrl
             .httpPost()
             .authentication().bearer(token)
@@ -60,8 +68,15 @@ class GithubClient(
         )
     }
 
-    fun getLastTag(): TagsResponse {
+    internal fun lastTag(): TagsResponse {
         return request(lastTagRequest)
+    }
+
+    internal fun lastCommit(): CommitResponse {
+        return request(GraphqlRequest(
+            query = lastCommitQuery,
+            variables = baseCommitParameters
+        ))
     }
 
     private inline fun <reified T : BaseResponse> request(request: GraphqlRequest): T {
@@ -82,7 +97,7 @@ class GithubClient(
         return checkNotNull(response)
     }
 
-    fun commits(endOfPreviousCursor: String? = null): CommitResponse {
+    internal fun commits(endOfPreviousCursor: String? = null): CommitResponse {
         return request(prepareCommitsRequest(endOfPreviousCursor))
     }
 

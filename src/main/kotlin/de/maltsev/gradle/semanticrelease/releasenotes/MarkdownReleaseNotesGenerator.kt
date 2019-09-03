@@ -1,24 +1,23 @@
 package de.maltsev.gradle.semanticrelease.releasenotes
 
-import de.maltsev.gradle.semanticrelease.versions.SemanticVersion
-import de.maltsev.gradle.semanticrelease.versions.VersionChange
+import de.maltsev.gradle.semanticrelease.versions.VersionChangeGroup
+import de.maltsev.gradle.semanticrelease.versions.VersionContext
 import java.time.LocalDate
 
-object MarkdownReleaseNotesGenerator {
-    fun generate(version: SemanticVersion, changes: List<VersionChange>): String {
-        val releaseNotes = StringBuilder("## $version (${LocalDate.now()})")
-
-        val changesText = changes
-            .groupBy { it.group }
-            .toSortedMap()
-            .map { (changeName, commits) ->
-                "#### $changeName\n\n${commits.joinToString("\n", transform = GenericMarkdownFormatter::asMarkdown)}"
-            }.joinToString("\n\n")
-
-        return if (changesText.isEmpty()) {
-            releaseNotes.toString()
-        } else {
-            releaseNotes.append("\n\n").append(changesText).toString()
+fun VersionContext.releaseNotes(includedGroups: Set<VersionChangeGroup>): String {
+    val releaseNotes = StringBuilder("## $version (${LocalDate.now()})")
+    val changesText = changes
+        .groupBy { it.group }
+        .toSortedMap(compareBy { it.priority })
+        .filter { (group, _) ->
+            group in includedGroups
         }
+        .map { (changeGroup, commits) ->
+            "#### ${changeGroup.groupName}\n\n${commits.joinToString("\n", transform = { it.asMarkdown() })}"
+        }
+        .joinToString("\n\n")
+    return when {
+        changesText.isEmpty() -> releaseNotes.toString()
+        else -> releaseNotes.append("\n\n").append(changesText).toString()
     }
 }

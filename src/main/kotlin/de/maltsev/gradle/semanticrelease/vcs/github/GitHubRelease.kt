@@ -2,7 +2,7 @@ package de.maltsev.gradle.semanticrelease.vcs.github
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class GitHubRelease(
+internal data class GitHubRelease(
     @JsonProperty("tag_name")
     val tagName: String,
     @JsonProperty("target_commitish")

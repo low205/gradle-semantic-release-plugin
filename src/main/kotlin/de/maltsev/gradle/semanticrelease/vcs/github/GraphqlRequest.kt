@@ -1,6 +1,6 @@
 package de.maltsev.gradle.semanticrelease.vcs.github
 
-data class GraphqlRequest(
+internal data class GraphqlRequest(
     val query: String,
     val variables: Map<String, String>
 )
