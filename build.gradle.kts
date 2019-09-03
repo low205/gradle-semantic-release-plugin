@@ -11,6 +11,7 @@ plugins {
     id("com.gradle.plugin-publish")
     id("com.jfrog.bintray")
     id("de.maltsev.gradle.semanticrelease")
+    id("com.github.ben-manes.versions")
 }
 
 group = "de.maltsev"

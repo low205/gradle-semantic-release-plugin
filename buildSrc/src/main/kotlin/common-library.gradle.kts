@@ -27,7 +27,6 @@ val kotlinTestVersion: String by extra
 val arrowVersion: String by extra
 val ktlintVersion: String by extra
 val fuelVersion: String by extra
-val koinVersion: String by extra
 val arrowCoreExtVersion: String by extra
 
 dependencies {
@@ -39,7 +38,6 @@ dependencies {
     implementation("com.github.kittinunf.fuel:fuel-jackson:$fuelVersion")
     implementation("io.arrow-kt:arrow-core:$arrowVersion")
     implementation("io.arrow-kt:arrow-core-extensions:$arrowCoreExtVersion")
-    implementation("org.koin:koin-core:$koinVersion")
 
     testImplementation("io.mockk:mockk:$mockkVersion")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
