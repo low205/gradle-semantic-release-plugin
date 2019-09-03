@@ -4,48 +4,50 @@ import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
 
-data class SemanticVersion(
+sealed class SemanticVersion
+
+data class BranchSemanticVersion(
+    private val branchName: String,
+    private val commitHash: String
+) : SemanticVersion() {
+    override fun toString() = "$branchName.$commitHash"
+}
+
+data class MasterSemanticVersion(
     val prefix: String,
     val major: Int,
     val minor: Int,
-    val patch: Int,
-    val stage: Option<Stage> = None
-) {
-    private fun nextMajor(): SemanticVersion = this.copy(major = major + 1, minor = 0, patch = 0)
-    private fun nextMinor(): SemanticVersion = this.copy(minor = minor + 1, patch = 0)
-    private fun nextPatch(): SemanticVersion = this.copy(patch = patch + 1)
-    private fun nextStage(count: Int): SemanticVersion = this.copy(stage = stage.map { it.copy(commit = it.commit + count) })
-
-    fun nextVersion(changes: List<VersionChange>): SemanticVersion {
-        return when {
-            staged() -> nextStage(changes.count())
-            else -> {
-                val semanticChanges = changes.filter { it is SemanticChange }
-                when {
-                    semanticChanges.any { it is MajorChange } -> nextMajor()
-                    semanticChanges.any { it is MinorChange } -> nextMinor()
-                    semanticChanges.any { it is PatchChange } -> nextPatch()
-                    else -> this
-                }
-            }
-        }
-    }
-
-    data class Stage(
-        val name: String,
-        val commit: Int
+    val patch: Int
+) : SemanticVersion() {
+    fun nextMajor(): MasterSemanticVersion = copy(
+        major = major + 1,
+        minor = 0,
+        patch = 0
     )
 
-    fun staged() = stage is Some
+    fun nextMinor(): MasterSemanticVersion = copy(
+        minor = minor + 1,
+        patch = 0
+    )
 
-    override fun toString() = when (stage) {
-        is Some -> "$major.$minor.$patch-${stage.t.name}.${stage.t.commit}"
-        is None -> "$major.$minor.$patch"
-    }
+    fun nextPatch(): MasterSemanticVersion = copy(
+        patch = patch + 1
+    )
 
-    fun toVcsString() = "$prefix${toString()}"
+    override fun toString() = "$prefix$major.$minor.$patch"
+}
 
-    fun withStageAt(stage: Stage): SemanticVersion {
-        return this.copy(stage = Some(stage))
-    }
+fun MasterSemanticVersion.nextVersion(changes: List<VersionChange>): Option<MasterSemanticVersion> {
+    val version = this
+    return changes
+        .map { it.group }
+        .toSet()
+        .run {
+            when {
+                contains(VersionChangeGroup.MAJOR) -> Some(version.nextMajor())
+                contains(VersionChangeGroup.MINOR) -> Some(version.nextMinor())
+                contains(VersionChangeGroup.PATCH) -> Some(version.nextPatch())
+                else -> None
+            }
+        }
 }

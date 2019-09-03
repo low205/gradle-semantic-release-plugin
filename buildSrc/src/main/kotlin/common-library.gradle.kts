@@ -27,20 +27,24 @@ val kotlinTestVersion: String by extra
 val arrowVersion: String by extra
 val ktlintVersion: String by extra
 val fuelVersion: String by extra
+val koinVersion: String by extra
+val arrowCoreExtVersion: String by extra
 
 dependencies {
-    "implementation"(kotlin("stdlib-jdk8", kotlinVersion))
-    "implementation"(kotlin("stdlib-jdk7", kotlinVersion))
-    "implementation"(kotlin("stdlib", kotlinVersion))
-    "implementation"(kotlin("reflect", kotlinVersion))
-    "implementation"("com.github.kittinunf.fuel:fuel:$fuelVersion")
-    "implementation"("com.github.kittinunf.fuel:fuel-jackson:$fuelVersion")
-    "implementation"("io.arrow-kt:arrow-core:$arrowVersion")
+    implementation(kotlin("stdlib-jdk8", kotlinVersion))
+    implementation(kotlin("stdlib-jdk7", kotlinVersion))
+    implementation(kotlin("stdlib", kotlinVersion))
+    implementation(kotlin("reflect", kotlinVersion))
+    implementation("com.github.kittinunf.fuel:fuel:$fuelVersion")
+    implementation("com.github.kittinunf.fuel:fuel-jackson:$fuelVersion")
+    implementation("io.arrow-kt:arrow-core:$arrowVersion")
+    implementation("io.arrow-kt:arrow-core-extensions:$arrowCoreExtVersion")
+    implementation("org.koin:koin-core:$koinVersion")
 
-    "testImplementation"("io.mockk:mockk:$mockkVersion")
-    "testImplementation"("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
-    "testImplementation"("io.kotlintest:kotlintest-assertions:$kotlinTestVersion")
-    "testImplementation"("io.kotlintest:kotlintest-assertions-arrow:$kotlinTestVersion")
+    testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
+    testImplementation("io.kotlintest:kotlintest-assertions:$kotlinTestVersion")
+    testImplementation("io.kotlintest:kotlintest-assertions-arrow:$kotlinTestVersion")
 
     ktlint("com.github.shyiko:ktlint:$ktlintVersion")
 }

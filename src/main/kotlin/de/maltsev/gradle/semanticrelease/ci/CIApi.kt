@@ -1,8 +1,6 @@
 package de.maltsev.gradle.semanticrelease.ci
 
-interface CITool {
-    fun isMaster(): Boolean
+interface CIApi {
     fun currentBranchName(): String
-    fun isStage(): Boolean
     fun repositorySlug(): String
 }

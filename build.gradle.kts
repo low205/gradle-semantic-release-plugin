@@ -61,11 +61,11 @@ pluginBundle {
     }
 }
 
-tasks.dokka {
-    reportUndocumented = false
-    outputFormat = "javadoc"
-    outputDirectory = "$buildDir/javadoc"
-}
+//tasks.dokka {
+//    reportUndocumented = false
+//    outputFormat = "javadoc"
+//    outputDirectory = "$buildDir/javadoc"
+//}
 
 sourceSets["main"].java.srcDir("$buildDir/generated/src")
 

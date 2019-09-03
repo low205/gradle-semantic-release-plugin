@@ -1,6 +1,6 @@
 package de.maltsev.gradle.semanticrelease.vcs.github
 
-data class GraphqlError(
+internal data class GraphqlError(
     val type: String? = null,
     val path: List<String>? = null,
     val locations: List<GraphqlErrorLocation>? = null,
