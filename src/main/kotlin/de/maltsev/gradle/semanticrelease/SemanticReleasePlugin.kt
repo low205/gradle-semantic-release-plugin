@@ -50,6 +50,7 @@ class SemanticReleasePlugin : Plugin<Project> {
     private fun setProjectVersion(project: Project, versionContext: VersionContext) {
         val version = versionContext.version
         project.version = version.toString()
+        project.setProperty("hasNewVersion", versionContext.hasNewVersion)
         project.subprojects {
             it.version = project.version
         }

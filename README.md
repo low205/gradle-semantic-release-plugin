@@ -27,6 +27,7 @@ _Source: [semantic-release/semantic-release#how-does-it-work](https://github.com
 * configure your Travis build to have GITHUB_TOKEN, which is OAuth token with access to your repository
 * remove from your gradle build code which sets `version`
 * now your current version and next version will be inferred automatically by computing next version based on commits happened after latest release 
+* plugin will set `hasNewVersion` to true is newer version was detected
 * run task `semanticReleasePublish` to publish new release on GitHub.
     * Preferred way to use it is to add this task to after success in `tavis.yml`:
       ```

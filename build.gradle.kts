@@ -141,9 +141,9 @@ bintray {
 
 tasks {
     "bintrayUpload"(BintrayUploadTask::class) {
-        onlyIf { version != "unspecified" && project.hasProperty("semanticVersion")}
+        onlyIf { version != "unspecified" }
     }
     "publishPlugins" {
-        onlyIf { version != "unspecified" && project.hasProperty("semanticVersion")}
+        onlyIf { version != "unspecified" }
     }
 }

@@ -9,6 +9,7 @@ internal val tagQuery: String = """query
         |                 name
         |                 target {
         |                   oid
+        |                   abbreviatedOid
         |                 }
         |               }
         |           }
@@ -34,6 +35,7 @@ internal val lastCommitQuery: String = """
         |                ... on Commit {
         |                  id
         |                  oid
+        |                  abbreviatedOid
         |                  message
         |                  committedDate
         |                }
@@ -64,6 +66,7 @@ internal val commitsQuery: String = """
         |                ... on Commit {
         |                  id
         |                  oid
+        |                  abbreviatedOid
         |                  message
         |                  committedDate
         |                }
@@ -94,6 +97,7 @@ internal val nextCommitsQuery = """
         |                ... on Commit {
         |                  id
         |                  oid
+        |                  abbreviatedOid
         |                  message
         |                  committedDate
         |                }
