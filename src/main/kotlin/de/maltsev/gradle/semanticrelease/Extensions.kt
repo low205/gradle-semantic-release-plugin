@@ -1,5 +1,6 @@
 package de.maltsev.gradle.semanticrelease
 
+import de.maltsev.gradle.semanticrelease.SemanticReleasePlugin.Companion.HAS_NEW_SEMANTIC_VERSION
 import org.gradle.api.Project
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.ListProperty
@@ -42,3 +43,5 @@ internal val Environment.gitHubToken: String
 
 fun Project.semanticRelease(configure: SemanticReleasePluginExtension.() -> Unit) =
     extensions.configure(SemanticReleasePluginExtension::class.java, configure)
+
+fun Project.hasNewSemanticVersion() = this.version != "unspecified" && this.findProperty(HAS_NEW_SEMANTIC_VERSION) ?: false == true
