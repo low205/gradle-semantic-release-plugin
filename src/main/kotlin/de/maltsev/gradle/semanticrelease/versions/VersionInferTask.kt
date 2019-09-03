@@ -17,10 +17,7 @@ class VersionInferTaskOnBranch(
     override fun getVersionContext(): VersionContext {
         val lastCommit = vscTool.lastCommit()
 
-        val version = BranchSemanticVersion(
-            branch,
-            lastCommit.id.shortId
-        )
+        val version = BranchSemanticVersion(branch, lastCommit.id.shortId)
 
         return VersionContext(
             hasNewVersion = false,
@@ -36,15 +33,9 @@ class VersionInferTaskOnTarget(
 
     override fun getVersionContext(): VersionContext {
         val latestRelease = vscTool.latestRelease()
-
-        val maybeLatestVersion = latestRelease.map {
-            it.version.asSemanticVersion()
-        }
-
+        val maybeLatestVersion = latestRelease.map { it.version.asSemanticVersion() }
         val changes = latestRelease.map { vscTool.commitsBefore(it.commitId).map(VcsCommit::asVersionChange) }.getOrElse { emptyList() }
-
         val maybeNextVersion = maybeLatestVersion.flatMap { version -> version.nextVersion(changes) }
-
         val version =
             when (maybeLatestVersion) {
                 is None -> firstVersion
@@ -53,7 +44,6 @@ class VersionInferTaskOnTarget(
                     is Some -> maybeNextVersion.t
                 }
             }
-
         return VersionContext(
             hasNewVersion = maybeLatestVersion.isEmpty() || maybeNextVersion.isDefined(),
             version = version,

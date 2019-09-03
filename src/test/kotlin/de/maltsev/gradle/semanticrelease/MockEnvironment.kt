@@ -5,4 +5,3 @@ class MockEnvironment(private val env: Map<String, String> = emptyMap()) : Envir
         return env[name]
     }
 }
-

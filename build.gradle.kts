@@ -75,22 +75,22 @@ val sourcesJar by tasks.creating(Jar::class) {
     from(sourceSets["main"].allSource)
 }
 
-val javadocJar by tasks.creating(Jar::class) {
-    dependsOn("dokka")
-    archiveClassifier.set("javadoc")
-    from(buildDir.resolve("javadoc"))
-}
+//val javadocJar by tasks.creating(Jar::class) {
+//    dependsOn("dokka")
+//    archiveClassifier.set("javadoc")
+//    from(buildDir.resolve("javadoc"))
+//}
 
 artifacts {
     archives(sourcesJar)
-    archives(javadocJar)
+//    archives(javadocJar)
 }
 
 publishing {
     publications.create<MavenPublication>("SemanticReleasePublication") {
         from(components["java"])
         artifact(sourcesJar)
-        artifact(javadocJar)
+//        artifact(javadocJar)
         groupId = rootProject.group.toString()
         artifactId = rootProject.name
         version = rootProject.version.toString()

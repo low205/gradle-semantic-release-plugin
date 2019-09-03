@@ -28,9 +28,13 @@ open class PublishSemanticReleaseGitHubTask : DefaultTask() {
     @TaskAction
     fun action() {
         val versionContext = version.get()
-        logger.lifecycle("Publishing version ${versionContext.version}.")
-        val releaseNotes = versionContext.releaseNotes(changesGroups.get().toSet())
-        logger.lifecycle("Release notes:\n$releaseNotes.")
-        versionPublisher.get().publishRelease(currentBranch.get(), versionContext.version.toString(), releaseNotes)
+        if (versionContext.hasNewVersion) {
+            logger.lifecycle("Publishing version ${versionContext.version}.")
+            val releaseNotes = versionContext.releaseNotes(changesGroups.get().toSet())
+            logger.lifecycle("Release notes:\n$releaseNotes.")
+            versionPublisher.get().publishRelease(currentBranch.get(), versionContext.version.toString(), releaseNotes)
+        } else {
+            logger.lifecycle("Nothing to publish.")
+        }
     }
 }

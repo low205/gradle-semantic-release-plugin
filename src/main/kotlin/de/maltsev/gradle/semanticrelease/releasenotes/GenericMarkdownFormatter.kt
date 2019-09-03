@@ -7,7 +7,7 @@ import de.maltsev.gradle.semanticrelease.versions.VersionChange
 
 fun VersionChange.asMarkdown(): String {
     val descriptor = this.descriptor
-    val subType = when (val optionalSubtype: Option<String> = descriptor.subType.map { "**$it**:" }) {
+    val subType = when (val optionalSubtype: Option<String> = descriptor.subType.map { "**$it**: " }) {
         is Some -> optionalSubtype.t
         is None -> ""
     }
@@ -15,5 +15,5 @@ fun VersionChange.asMarkdown(): String {
         is Some -> optionalBreakingMessage.t
         is None -> ""
     }
-    return "* $subType ${descriptor.message} (${this.commitId})$breakingChangeMessage"
+    return "* $subType${descriptor.message} (${this.commitId})$breakingChangeMessage"
 }

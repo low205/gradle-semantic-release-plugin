@@ -1,14 +1,13 @@
 package de.maltsev.gradle.semanticrelease.releasenotes
 
-import arrow.core.Some
+import de.maltsev.gradle.semanticrelease.vcs.VcsCommit
 import de.maltsev.gradle.semanticrelease.vcs.VcsCommitId
 import de.maltsev.gradle.semanticrelease.versions.MasterSemanticVersion
-import de.maltsev.gradle.semanticrelease.versions.SemanticCommitMessage
-import de.maltsev.gradle.semanticrelease.versions.SemanticVersion
 import de.maltsev.gradle.semanticrelease.versions.VersionChange
 import de.maltsev.gradle.semanticrelease.versions.VersionChangeGroup
 import de.maltsev.gradle.semanticrelease.versions.VersionContext
 import de.maltsev.gradle.semanticrelease.versions.asSemanticCommitMessage
+import de.maltsev.gradle.semanticrelease.versions.asVersionChange
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.ShouldSpec
 import java.time.LocalDate
@@ -46,45 +45,169 @@ class MarkdownReleaseNotesGeneratorTest : ShouldSpec() {
                                 |
                                 |#### Features
                                 |
-                                |*  change 5 (5)
+                                |* change 5 (5)
                                 |
                                 |#### Bug Fixes
                                 |
-                                |*  change 3 (3)
+                                |* change 3 (3)
                                 |
                                 |#### Performance Improvements
                                 |
-                                |*  change 12 (12)
+                                |* change 12 (12)
                                 |
                                 |#### Reverts
                                 |
-                                |*  change 9 (9)
+                                |* change 9 (9)
                                 |
                                 |#### Documentation
                                 |
-                                |*  change 10 (10)
+                                |* change 10 (10)
                                 |
                                 |#### Style
                                 |
-                                |*  change 2 (2)
+                                |* change 2 (2)
                                 |
                                 |#### Code Refactoring
                                 |
-                                |*  change 4 (4)
+                                |* change 4 (4)
                                 |
                                 |#### Tests
                                 |
-                                |*  change 6 (6)
+                                |* change 6 (6)
                                 |
                                 |#### Chores
                                 |
-                                |*  change 8 (8)
+                                |* change 8 (8)
                                 |
                                 |#### Others
                                 |
-                                |*  change 1 (1)
-                                |*  change 11 (11)
-                                |*  change 13 (13)""".trimMargin()
+                                |* change 1 (1)
+                                |* change 11 (11)
+                                |* change 13 (13)""".trimMargin()
+        }
+
+        should("generate expected fix release notes") {
+            val releaseNotes = VersionContext(
+                true,
+                MasterSemanticVersion("v", 1, 1, 1),
+                listOf(VcsCommit(
+                    VcsCommitId("commitHash", "1"),
+                    "fix: add check for null pointer exception"
+                ).asVersionChange())
+            ).releaseNotes(VersionChangeGroup.values().toSet())
+
+            releaseNotes shouldBe """
+                ## v1.1.1 (2019-09-03)
+
+                #### Bug Fixes
+
+                * add check for null pointer exception (commitHash)
+            """.trimIndent()
+        }
+
+        should("generate expected fix release notes with subType") {
+            val releaseNotes = VersionContext(
+                true,
+                MasterSemanticVersion("v", 1, 1, 1),
+                listOf(VcsCommit(
+                    VcsCommitId("commitHash", "1"),
+                    "fix(payments): add check for null pointer exception"
+                ).asVersionChange())
+            ).releaseNotes(VersionChangeGroup.values().toSet())
+
+            releaseNotes shouldBe """
+                ## v1.1.1 (2019-09-03)
+
+                #### Bug Fixes
+
+                * **payments**: add check for null pointer exception (commitHash)
+            """.trimIndent()
+        }
+
+        should("generate expected feat release notes") {
+            val releaseNotes = VersionContext(
+                true,
+                MasterSemanticVersion("v", 1, 1, 1),
+                listOf(VcsCommit(
+                    VcsCommitId("commitHash", "1"),
+                    "feat: create new repository"
+                ).asVersionChange())
+            ).releaseNotes(VersionChangeGroup.values().toSet())
+
+            releaseNotes shouldBe """
+                ## v1.1.1 (2019-09-03)
+
+                #### Features
+
+                * create new repository (commitHash)
+            """.trimIndent()
+        }
+
+        should("generate expected feat release notes with subType") {
+            val releaseNotes = VersionContext(
+                true,
+                MasterSemanticVersion("v", 1, 1, 1),
+                listOf(VcsCommit(
+                    VcsCommitId("commitHash", "1"),
+                    "feat(jpa): create new repository"
+                ).asVersionChange())
+            ).releaseNotes(VersionChangeGroup.values().toSet())
+
+            releaseNotes shouldBe """
+                ## v1.1.1 (2019-09-03)
+
+                #### Features
+
+                * **jpa**: create new repository (commitHash)
+            """.trimIndent()
+        }
+
+        should("generate expected breaking change release notes") {
+            val releaseNotes = VersionContext(
+                true,
+                MasterSemanticVersion("v", 1, 1, 1),
+                listOf(VcsCommit(
+                    VcsCommitId("commitHash", "1"),
+                    """
+                        feat: new version 2 api 
+      
+                        BREAKING CHANGE: old version 1 api removed
+                    """.trimIndent()
+                ).asVersionChange())
+            ).releaseNotes(VersionChangeGroup.values().toSet())
+
+            releaseNotes shouldBe """
+                ## v1.1.1 (2019-09-03)
+
+                #### Breaking Changes
+
+                * new version 2 api (commitHash)
+                ${'\t'}```BREAKING CHANGE: old version 1 api removed```
+            """.trimIndent()
+        }
+
+        should("generate expected breaking change release notes with subType") {
+            val releaseNotes = VersionContext(
+                true,
+                MasterSemanticVersion("v", 1, 1, 1),
+                listOf(VcsCommit(
+                    VcsCommitId("commitHash", "1"),
+                    """
+                        feat(api): new version 2 api 
+      
+                        BREAKING CHANGE: old version 1 api removed
+                    """.trimIndent()
+                ).asVersionChange())
+            ).releaseNotes(VersionChangeGroup.values().toSet())
+
+            releaseNotes shouldBe """
+                ## v1.1.1 (2019-09-03)
+
+                #### Breaking Changes
+
+                * **api**: new version 2 api (commitHash)
+                ${'\t'}```BREAKING CHANGE: old version 1 api removed```
+            """.trimIndent()
         }
     }
 }

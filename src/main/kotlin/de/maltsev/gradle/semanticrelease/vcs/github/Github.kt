@@ -5,9 +5,7 @@ import arrow.core.toOption
 import de.maltsev.gradle.semanticrelease.vcs.VCSSource
 import de.maltsev.gradle.semanticrelease.vcs.VcsCommit
 import de.maltsev.gradle.semanticrelease.vcs.VcsCommitId
-import de.maltsev.gradle.semanticrelease.vcs.VcsDiff
 import de.maltsev.gradle.semanticrelease.vcs.VcsRelease
-import java.lang.IllegalStateException
 
 class Github(private val client: GithubClient, private val currentBranch: String) : VCSSource {
     override fun latestRelease(): Option<VcsRelease> {
@@ -48,7 +46,7 @@ class Github(private val client: GithubClient, private val currentBranch: String
         }
 
         val indexOfRelease = commits.indexOfFirst { it.id == commitId }
-        check(indexOfRelease != -1) { "From all ${commits.count()} commits commit with oid ${commitId} could not be found." }
+        check(indexOfRelease != -1) { "From all ${commits.count()} commits commit with oid $commitId could not be found." }
 
         return commits.take(indexOfRelease)
     }
