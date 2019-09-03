@@ -1,7 +1,8 @@
 [![Build Status](https://travis-ci.org/low205/gradle-semantic-release-plugin.svg?branch=master)](https://travis-ci.org/low205/gradle-semantic-release-plugin)
 [ ![Download](https://api.bintray.com/packages/low205/gradle-plugins/gradle-semantic-release-plugin/images/download.svg) ](https://bintray.com/low205/gradle-plugins/gradle-semantic-release-plugin/_latestVersion)
-# gradle-semantic-release-plugin
+[![codecov](https://codecov.io/gh/low205/gradle-semantic-release-plugin/branch/master/graph/badge.svg)](https://codecov.io/gh/low205/gradle-semantic-release-plugin)
 
+# gradle-semantic-release-plugin
 This is a very simple semantic release plugin for projects which use *GitHub* and *Travis*.
 
 ##### Inspired by:
