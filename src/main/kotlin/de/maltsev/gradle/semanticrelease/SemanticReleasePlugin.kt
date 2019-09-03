@@ -16,7 +16,7 @@ import org.gradle.api.Project
 class SemanticReleasePlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val env = SystemEnvironment()
-        val extension = project.extensions.create(SEMANTIC_RELEASE, SemanticReleasePluginExtension::class.java, project.objects, env)
+        val extension = project.extensions.create(SEMANTIC_RELEASE, SemanticReleasePluginExtension::class.java, project.objects)
         val factory = DefaultFactory(env, extension)
         val ciTool = factory.travis
         val vscTool = factory.gitHub
