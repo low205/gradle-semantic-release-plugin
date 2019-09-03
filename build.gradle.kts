@@ -1,5 +1,7 @@
 import com.jfrog.bintray.gradle.BintrayExtension
 import com.jfrog.bintray.gradle.tasks.BintrayUploadTask
+import de.maltsev.gradle.semanticrelease.VersionInference
+import de.maltsev.gradle.semanticrelease.semanticRelease
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import java.util.Date
@@ -141,9 +143,13 @@ bintray {
 
 tasks {
     "bintrayUpload"(BintrayUploadTask::class) {
-        onlyIf { version != "unspecified" }
+        onlyIf { project.findProperty("hasNewVersion") ?: false == true }
     }
     "publishPlugins" {
-        onlyIf { version != "unspecified" }
+        onlyIf { project.findProperty("hasNewVersion") ?: false == true }
     }
+}
+
+semanticRelease {
+    inferVersion.set(VersionInference.ONLY_ON_TARGET)
 }
