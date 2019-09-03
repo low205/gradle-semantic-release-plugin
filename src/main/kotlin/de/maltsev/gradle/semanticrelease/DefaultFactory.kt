@@ -9,30 +9,40 @@ class DefaultFactory(
     env: Environment,
     extension: SemanticReleasePluginExtension
 ) {
-    val travis: Travis by lazy {
-        check(env.hasTravis()) { "Travis is not present" }
-        Travis(TravisEnvironment(env), extension.targetBranch.get())
+    val travis: Travis? by lazy {
+        when {
+            env.hasTravis() -> Travis(TravisEnvironment(env), extension.targetBranch.get())
+            else -> null
+        }
     }
 
-    private val currentBranch: String by lazy {
-        travis.currentBranchName()
+    private val currentBranch: String? by lazy {
+        travis?.currentBranchName()
     }
 
-    private val githubClient: GithubClient by lazy {
-        check(env.hasGitHub()) { "GitHub is not present" }
-        GithubClient(
-            token = env.gitHubToken,
-            repositoryName = travis.repositorySlug().split("/")[1],
-            repositoryOwner = travis.repositorySlug().split("/")[0],
-            branch = currentBranch
-        )
+    private val githubClient: GithubClient? by lazy {
+        when {
+            env.hasGitHub() && travis != null && currentBranch != null -> GithubClient(
+                token = env.gitHubToken,
+                repositoryName = travis!!.repositorySlug().split("/")[1],
+                repositoryOwner = travis!!.repositorySlug().split("/")[0],
+                branch = currentBranch!!
+            )
+            else -> null
+        }
     }
 
-    val gitHub: Github by lazy {
-        Github(githubClient, currentBranch)
+    val gitHub: Github? by lazy {
+        when {
+            githubClient != null && currentBranch != null -> Github(githubClient!!, currentBranch!!)
+            else -> null
+        }
     }
 
-    val gitHubPublisher: GitHubPublisher by lazy {
-        GitHubPublisher(githubClient)
+    val gitHubPublisher: GitHubPublisher? by lazy {
+        when {
+            githubClient != null -> GitHubPublisher(githubClient!!)
+            else -> null
+        }
     }
 }

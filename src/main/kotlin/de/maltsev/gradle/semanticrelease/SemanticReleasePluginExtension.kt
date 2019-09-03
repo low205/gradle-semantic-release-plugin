@@ -9,6 +9,6 @@ open class SemanticReleasePluginExtension(
     objectFactory: ObjectFactory
 ) {
     val targetBranch: Property<String> = objectFactory.lazyWith("master")
-    val inferVersion: Property<VersionInference> = objectFactory.lazyWith(VersionInference.ALWAYS)
+    val inferVersion: Property<VersionInference> = objectFactory.lazyWith(VersionInference.ONLY_ON_TARGET)
     val releaseChanges: ListProperty<VersionChangeGroup> = objectFactory.lazyWith(VersionChangeGroup.values().asList())
 }

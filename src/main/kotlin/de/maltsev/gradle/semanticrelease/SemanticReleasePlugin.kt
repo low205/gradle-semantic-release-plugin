@@ -18,14 +18,12 @@ class SemanticReleasePlugin : Plugin<Project> {
         val env = SystemEnvironment()
         val extension = project.extensions.create(SEMANTIC_RELEASE, SemanticReleasePluginExtension::class.java, project.objects)
         val factory = DefaultFactory(env, extension)
-        val ciTool = factory.travis
-        val vscTool = factory.gitHub
-        val inferTask = inferVersion(ciTool, vscTool, project, extension)
-        val versionContext = inferTask?.getVersionContext()
-        if (versionContext != null) {
-            setProjectVersion(project, versionContext)
-            registerPublishReleaseNotesTask(project, ciTool.currentBranchName(), versionContext, factory, extension)
-        }
+        val ciTool = factory.travis ?: return
+        val vscTool = factory.gitHub ?: return
+        val inferTask = inferVersion(ciTool, vscTool, project, extension) ?: return
+        val versionContext = inferTask.getVersionContext()
+        setProjectVersion(project, versionContext)
+        registerPublishReleaseNotesTask(project, ciTool.currentBranchName(), versionContext, factory, extension)
     }
 
     private fun inferVersion(
@@ -50,7 +48,7 @@ class SemanticReleasePlugin : Plugin<Project> {
     private fun setProjectVersion(project: Project, versionContext: VersionContext) {
         val version = versionContext.version
         project.version = version.toString()
-        project.setProperty("hasNewVersion", versionContext.hasNewVersion)
+        project.setProperty(HAS_NEW_SEMANTIC_VERSION, versionContext.hasNewVersion)
         project.subprojects {
             it.version = project.version
         }
@@ -77,5 +75,6 @@ class SemanticReleasePlugin : Plugin<Project> {
     companion object {
         private const val SEMANTIC_PUBLISH = "semanticReleasePublish"
         private const val SEMANTIC_RELEASE = "semanticRelease"
+        internal const val HAS_NEW_SEMANTIC_VERSION = "hasNewSemanticVersion"
     }
 }
