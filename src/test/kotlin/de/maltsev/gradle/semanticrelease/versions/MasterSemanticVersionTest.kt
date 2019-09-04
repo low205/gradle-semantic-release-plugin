@@ -1,15 +1,19 @@
 package de.maltsev.gradle.semanticrelease.versions
 
 import de.maltsev.gradle.semanticrelease.vcs.VcsCommitId
-import de.maltsev.gradle.semanticrelease.versions.VersionChangeGroup.*
+import de.maltsev.gradle.semanticrelease.versions.VersionChangeGroup.MAJOR
+import de.maltsev.gradle.semanticrelease.versions.VersionChangeGroup.MINOR
+import de.maltsev.gradle.semanticrelease.versions.VersionChangeGroup.PATCH
+import de.maltsev.gradle.semanticrelease.versions.VersionChangeGroup.values
 import io.kotlintest.assertions.arrow.option.shouldBeNone
 import io.kotlintest.assertions.arrow.option.shouldBeSome
-import io.kotlintest.specs.ShouldSpec
 import io.kotlintest.shouldBe
+import io.kotlintest.specs.ShouldSpec
 
 class MasterSemanticVersionTest : ShouldSpec() {
 
     val version = MasterSemanticVersion("v", 1, 2, 3)
+
     init {
         should("have proper artifact version") {
             val artifactVersion = version.artifactVersion()
@@ -58,5 +62,5 @@ class MasterSemanticVersionTest : ShouldSpec() {
         }
     }
 
-    private fun VersionChangeGroup.asChange() =  VersionChange(SemanticCommitMessage(), VcsCommitId("",""), this)
+    private fun VersionChangeGroup.asChange() = VersionChange(SemanticCommitMessage(), VcsCommitId("", ""), this)
 }

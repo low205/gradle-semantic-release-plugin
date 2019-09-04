@@ -19,5 +19,4 @@ class BranchSemanticVersionTest : ShouldSpec() {
             version.artifactVersion() shouldBe version.vscString()
         }
     }
-
 }
