@@ -1,6 +1,6 @@
 package de.maltsev.gradle.semanticrelease.versions
 
-import de.maltsev.gradle.semanticrelease.vcs.VcsCommitId
+import de.maltsev.gradle.semanticrelease.asChange
 import de.maltsev.gradle.semanticrelease.versions.VersionChangeGroup.MAJOR
 import de.maltsev.gradle.semanticrelease.versions.VersionChangeGroup.MINOR
 import de.maltsev.gradle.semanticrelease.versions.VersionChangeGroup.PATCH
@@ -12,12 +12,16 @@ import io.kotlintest.specs.ShouldSpec
 
 class MasterSemanticVersionTest : ShouldSpec() {
 
-    val version = MasterSemanticVersion("v", 1, 2, 3)
+    private val version = MasterSemanticVersion("v", 1, 2, 3)
 
     init {
         should("have proper artifact version") {
             val artifactVersion = version.artifactVersion()
             artifactVersion shouldBe "1.2.3"
+            version.prefix shouldBe "v"
+            version.major shouldBe 1
+            version.minor shouldBe 2
+            version.patch shouldBe 3
         }
 
         should("have vcs version with prefix") {
@@ -61,6 +65,4 @@ class MasterSemanticVersionTest : ShouldSpec() {
             ).shouldBeNone()
         }
     }
-
-    private fun VersionChangeGroup.asChange() = VersionChange(SemanticCommitMessage(), VcsCommitId("", ""), this)
 }

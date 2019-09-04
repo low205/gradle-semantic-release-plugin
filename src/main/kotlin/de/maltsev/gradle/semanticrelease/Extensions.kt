@@ -1,7 +1,5 @@
 package de.maltsev.gradle.semanticrelease
 
-import de.maltsev.gradle.semanticrelease.SemanticReleasePlugin.Companion.HAS_NEW_SEMANTIC_VERSION
-import de.maltsev.gradle.semanticrelease.SemanticReleasePlugin.Companion.IS_ON_TARGET
 import org.gradle.api.Project
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.provider.ListProperty
@@ -36,15 +34,3 @@ internal inline fun <reified T : Any> ObjectFactory.lazyList(): ListProperty<T> 
 internal inline fun <reified T : Any> ObjectFactory.lazy(): Property<T> {
     return this.property(T::class.java)
 }
-
-internal fun Environment.hasTravis(): Boolean = this.getEnv("TRAVIS") == "true"
-internal fun Environment.hasGitHub(): Boolean = this.getEnv("GITHUB_TOKEN") != null
-internal val Environment.gitHubToken: String
-    get() = checkNotNull(this.getEnv("GITHUB_TOKEN")) { "GITHUB_TOKEN not set" }
-
-fun Project.semanticRelease(configure: SemanticReleasePluginExtension.() -> Unit) =
-    extensions.configure(SemanticReleasePluginExtension::class.java, configure)
-
-fun Project.hasNewSemanticVersion() = this.version != "unspecified" && this.findProperty(HAS_NEW_SEMANTIC_VERSION) ?: false == true
-
-fun Project.isOnTargetBranch() = this.findProperty(IS_ON_TARGET) ?: false == true

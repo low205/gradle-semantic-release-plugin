@@ -1,6 +1,6 @@
 package de.maltsev.gradle.semanticrelease
 
-class TravisEnvironment(private val env: Environment) {
+internal class TravisEnvironment(private val env: Environment) {
     val pullRequestBranch by lazy {
         checkNotNull(env.getEnv("TRAVIS_PULL_REQUEST_BRANCH")) { "No TRAVIS_PULL_REQUEST_BRANCH found" }
     }

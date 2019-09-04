@@ -2,7 +2,9 @@ package de.maltsev.gradle.semanticrelease
 
 import de.maltsev.gradle.semanticrelease.ci.travis.Travis
 import de.maltsev.gradle.semanticrelease.publish.PublishSemanticReleaseGitHubTask
+import de.maltsev.gradle.semanticrelease.publish.github.GitHubPublisher
 import de.maltsev.gradle.semanticrelease.vcs.github.Github
+import de.maltsev.gradle.semanticrelease.vcs.github.GithubClient
 import de.maltsev.gradle.semanticrelease.versions.VersionContext
 import de.maltsev.gradle.semanticrelease.versions.VersionInferTask
 import de.maltsev.gradle.semanticrelease.versions.VersionInferTaskOnBranch
@@ -17,13 +19,23 @@ class SemanticReleasePlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val env = SystemEnvironment()
         val extension = project.extensions.create(SEMANTIC_RELEASE, SemanticReleasePluginExtension::class.java, project.objects)
-        val factory = DefaultFactory(env, extension)
-        val ciTool = factory.travis ?: return
-        val vscTool = factory.gitHub ?: return
-        val inferTask = inferVersion(ciTool, vscTool, project, extension) ?: return
-        val versionContext = inferTask.getVersionContext()
-        setProjectVersion(project, versionContext)
-        registerPublishReleaseNotesTask(project, ciTool.currentBranchName(), versionContext, factory, extension)
+        if (env.hasTravis() && env.hasGitHub()) {
+            val ciTool = Travis(TravisEnvironment(env))
+            val githubClient = GithubClient(
+                token = env.gitHubToken,
+                repositoryName = ciTool.repositorySlug().split("/")[1],
+                repositoryOwner = ciTool.repositorySlug().split("/")[0],
+                branch = ciTool.currentBranchName()
+            )
+            val publisher = GitHubPublisher(githubClient)
+            val vscTool = Github(githubClient, ciTool.currentBranchName())
+            val inferTask = inferVersion(ciTool, vscTool, project, extension)
+            val versionContext = inferTask?.getVersionContext()
+            if (versionContext != null) {
+                setProjectVersion(project, versionContext)
+                registerPublishReleaseNotesTask(project, ciTool.currentBranchName(), versionContext, publisher, extension)
+            }
+        }
     }
 
     private fun inferVersion(
@@ -61,14 +73,14 @@ class SemanticReleasePlugin : Plugin<Project> {
         project: Project,
         currentBranch: String,
         versionContext: VersionContext,
-        factory: DefaultFactory,
+        publisher: GitHubPublisher,
         extension: SemanticReleasePluginExtension
     ) {
         project.tasks.register(SEMANTIC_PUBLISH, PublishSemanticReleaseGitHubTask::class.java) { publishReleaseNotes ->
             publishReleaseNotes.group = "Semantic Version"
             publishReleaseNotes.description = "Creates release in GitHub with release notes"
             publishReleaseNotes.version.set(versionContext)
-            publishReleaseNotes.versionPublisher.set(factory.gitHubPublisher)
+            publishReleaseNotes.versionPublisher.set(publisher)
             publishReleaseNotes.changesGroups.set(extension.releaseChanges.get())
             publishReleaseNotes.currentBranch.set(currentBranch)
         }

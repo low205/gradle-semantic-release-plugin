@@ -1,8 +1,8 @@
 package de.maltsev.gradle.semanticrelease.publish
 
-import de.maltsev.gradle.semanticrelease.isOnTargetBranch
 import de.maltsev.gradle.semanticrelease.lazy
 import de.maltsev.gradle.semanticrelease.lazyList
+import de.maltsev.gradle.semanticrelease.project.isOnTargetBranch
 import de.maltsev.gradle.semanticrelease.releasenotes.releaseNotes
 import de.maltsev.gradle.semanticrelease.versions.VersionChangeGroup
 import de.maltsev.gradle.semanticrelease.versions.VersionContext

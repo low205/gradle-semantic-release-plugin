@@ -3,7 +3,7 @@ package de.maltsev.gradle.semanticrelease.ci.travis
 import de.maltsev.gradle.semanticrelease.TravisEnvironment
 import de.maltsev.gradle.semanticrelease.ci.CIApi
 
-class Travis(private val env: TravisEnvironment, private val targetBranch: String) : CIApi {
+internal class Travis(private val env: TravisEnvironment) : CIApi {
     override fun currentBranchName(): String {
         return when {
             env.pullRequestBranch.isNotBlank() -> env.pullRequestBranch

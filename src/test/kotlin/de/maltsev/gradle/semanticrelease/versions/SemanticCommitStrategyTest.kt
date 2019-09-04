@@ -2,15 +2,15 @@ package de.maltsev.gradle.semanticrelease.versions
 
 import arrow.core.None
 import arrow.core.Some
+import de.maltsev.gradle.semanticrelease.randomCommitId
 import de.maltsev.gradle.semanticrelease.vcs.VcsCommit
-import de.maltsev.gradle.semanticrelease.vcs.VcsCommitId
 import io.kotlintest.data.forall
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.ShouldSpec
 import io.kotlintest.tables.row
 
 class SemanticCommitStrategyTest : ShouldSpec() {
-    private val commitId = VcsCommitId("longHash", "shortHash")
+    private val commitId = randomCommitId()
 
     init {
         should("create major change if have BREAKING CHANGE no matter the group") {

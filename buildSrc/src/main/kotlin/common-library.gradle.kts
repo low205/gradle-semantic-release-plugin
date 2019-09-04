@@ -28,6 +28,7 @@ val ktlintVersion: String by extra
 val fuelVersion: String by extra
 val arrowCoreExtVersion: String by extra
 val jacksonVersion: String by extra
+val commonsLangVersion: String by extra
 
 dependencies {
     api(kotlin("stdlib-jdk8", kotlinVersion))
@@ -44,7 +45,8 @@ dependencies {
     testImplementation("io.kotlintest:kotlintest-runner-junit5:$kotlinTestVersion")
     testImplementation("io.kotlintest:kotlintest-assertions:$kotlinTestVersion")
     testImplementation("io.kotlintest:kotlintest-assertions-arrow:$kotlinTestVersion")
-
+    testImplementation("org.apache.commons:commons-lang3:$commonsLangVersion")
+    testImplementation(gradleTestKit())
     ktlint("com.github.shyiko:ktlint:$ktlintVersion")
 }
 

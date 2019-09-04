@@ -30,7 +30,7 @@ _Source: [semantic-release/semantic-release#how-does-it-work](https://github.com
 * plugin will add extension for Project, which will check if project has new version `Project.hasNewSemanticVersion()`
 * plugin will not check for any deployment or publishing tasks, so please provide a check to such tasks:
     
-        import de.maltsev.gradle.semanticrelease.hasNewSemanticVersion
+        import de.maltsev.gradle.semanticrelease.project.hasNewSemanticVersion
         tasks {
             "bintrayUpload"(BintrayUploadTask::class) {
                 onlyIf { hasNewSemanticVersion() }
@@ -125,8 +125,8 @@ Of course `semanticReleasePublish` task will run only on `master`.
 Also plugin will allow to use extension to check if your are on `master` branch.
 For example you would want to publish docker image from any branch, but publish artifacts only on `master`
     
-    import de.maltsev.gradle.semanticrelease.isOnTargetBranch
-    import de.maltsev.gradle.semanticrelease.hasNewSemanticVersion
+    import de.maltsev.gradle.semanticrelease.project.isOnTargetBranch
+    import de.maltsev.gradle.semanticrelease.project.hasNewSemanticVersion
     tasks {
          "dockerBuildImage" {
             onlyIf { hasNewSemanticVersion() }
@@ -138,7 +138,7 @@ For example you would want to publish docker image from any branch, but publish 
 #### External deployment
 You can use versionFile task when you deploying publishing outside of gradle:
         
-    import de.maltsev.gradle.semanticrelease.hasNewSemanticVersion
+    import de.maltsev.gradle.semanticrelease.project.hasNewSemanticVersion
     tasks {
         create("versionFile") {
             onlyIf { hasNewSemanticVersion() }
