@@ -18,7 +18,7 @@ _Source: [semantic-release/semantic-release#how-does-it-work](https://github.com
 
 #### How to use?
 
-* apply plugin:    
+* apply plugin in your root project:    
     
         plugins {
             id("de.maltsev.gradle.semanticrelease") version "[version]"
@@ -90,7 +90,7 @@ _Source: [semantic-release/semantic-release#how-does-it-work](https://github.com
 #### Version infer
 
 When build runs:
-* Plugin will find your detect branch from TRAVIS_PULL_REQUEST_BRANCH or TRAVIS_BRANCH,
+* Plugin will find your branch from TRAVIS_PULL_REQUEST_BRANCH or TRAVIS_BRANCH environment properties
 * Then will try to find latest release from GitHub. 
 * Then based on commit messages in changes will infer and set current project and subprojects version
 * If version had changes with major, minor or patch commit plugin will allow `semanticReleasePublish` task to run.
