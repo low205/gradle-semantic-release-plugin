@@ -18,18 +18,18 @@ _Source: [semantic-release/semantic-release#how-does-it-work](https://github.com
 
 #### How to use?
 
-* apply plugin:
-    ```
-    plugins {
-        id("de.maltsev.gradle.semanticrelease") version "[version]"
-    }
-    ```
+* apply plugin:    
+    
+        plugins {
+            id("de.maltsev.gradle.semanticrelease") version "[version]"
+        }
+        
 * configure your Travis build to have GITHUB_TOKEN, which is OAuth token with access to your repository
 * remove from your gradle build code which sets `version`
 * now your current version and next version will be inferred automatically by computing next version based on commits happened after latest release 
 * plugin will add extension for Project, which will check if project has new version `Project.hasNewSemanticVersion()`
-* plugin will not check for any deployment or publishing tasks, so please provide a check to such tasks
-    ```
+* plugin will not check for any deployment or publishing tasks, so please provide a check to such tasks:
+    
         import de.maltsev.gradle.semanticrelease.hasNewSemanticVersion
         tasks {
             "bintrayUpload"(BintrayUploadTask::class) {
@@ -37,12 +37,13 @@ _Source: [semantic-release/semantic-release#how-does-it-work](https://github.com
             }
         }
 * run task `semanticReleasePublish` to publish new release on GitHub.
-    * Preferred way to use it is to add this task to after success in `tavis.yml`:
-      ```
-        script:
-          - ./gradlew build
-        after_success:
-          - ./gradlew semanticReleasePublish      
+    * Preferred way to use it is to add this task to after success in `tavis.yml`:      
+        
+            script:
+              - ./gradlew build
+            after_success:
+              - ./gradlew semanticReleasePublish
+                
 * if you had no releases in github, first version will be 'v0.1.0'. You can manually create release with needed semantic version on master branch.
 
 #### Writing commits
@@ -84,7 +85,7 @@ _Source: [semantic-release/semantic-release#how-does-it-work](https://github.com
       #### Breaking Changes
   
       * **api**: new version 2 api (commitHash)
-          ```BREAKING CHANGE: old version 1 api removed
+          ```BREAKING CHANGE: old version 1 api removed```
 
 #### Version infer
 
@@ -98,35 +99,31 @@ When build runs:
 
 By default project configured with:
 
-```
-import de.maltsev.gradle.semanticrelease.VersionInference
-import de.maltsev.gradle.semanticrelease.versions.VersionChangeGroup
-
-semanticRelease {
-    targetBranch.set("master")
-    inferVersion.set(VersionInference.ONLY_ON_TARGET)
-    releaseChanges.set(VersionChangeGroup.values().asList())
-}
-
-```    
+    import de.maltsev.gradle.semanticrelease.VersionInference
+    import de.maltsev.gradle.semanticrelease.versions.VersionChangeGroup
+    
+    semanticRelease {
+        targetBranch.set("master")
+        inferVersion.set(VersionInference.ONLY_ON_TARGET)
+        releaseChanges.set(VersionChangeGroup.values().asList())
+    }
 
 #### Not on master?
 
 On other than `master` plugin can infer branched version with `<branchName>.<lastCommitHash>` pattern. 
 
 You can enable such inference by setting inferVersion configuration to ALWAYS:
-```
-import de.maltsev.gradle.semanticrelease.VersionInference
-semanticRelease {    
-    inferVersion.set(VersionInference.ALWAYS)
-}
-```
+    
+    import de.maltsev.gradle.semanticrelease.VersionInference
+    semanticRelease {    
+        inferVersion.set(VersionInference.ALWAYS)
+    }
 
 Of course `semanticReleasePublish` task will not run outside of `master`. 
 
 #### External deployment
-You can use versionFile task when you deploying publishing outside of gradle
-    ```
+You can use versionFile task when you deploying publishing outside of gradle:
+        
     import de.maltsev.gradle.semanticrelease.hasNewSemanticVersion
     tasks {
         create("versionFile") {
