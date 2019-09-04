@@ -5,7 +5,7 @@ import de.maltsev.gradle.semanticrelease.versions.VersionContext
 import java.time.LocalDate
 
 fun VersionContext.releaseNotes(includedGroups: Set<VersionChangeGroup>): String {
-    val releaseNotes = StringBuilder("## $version (${LocalDate.now()})")
+    val releaseNotes = StringBuilder("## ${version.vscString()} (${LocalDate.now()})")
     val changesText = changes
         .groupBy { it.group }
         .toSortedMap(compareBy { it.priority })

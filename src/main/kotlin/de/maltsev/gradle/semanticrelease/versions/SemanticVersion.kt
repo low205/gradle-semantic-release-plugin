@@ -4,13 +4,17 @@ import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
 
-sealed class SemanticVersion
+sealed class SemanticVersion {
+    abstract fun vscString(): String
+    abstract fun artifactVersion(): String
+}
 
 data class BranchSemanticVersion(
     private val branchName: String,
     private val commitHash: String
 ) : SemanticVersion() {
-    override fun toString() = "$branchName.$commitHash"
+    override fun artifactVersion() = "$branchName.$commitHash"
+    override fun vscString() = toString()
 }
 
 data class MasterSemanticVersion(
@@ -34,7 +38,8 @@ data class MasterSemanticVersion(
         patch = patch + 1
     )
 
-    override fun toString() = "$prefix$major.$minor.$patch"
+    override fun artifactVersion() = "$major.$minor.$patch"
+    override fun vscString() = "$prefix$major.$minor.$patch"
 }
 
 fun MasterSemanticVersion.nextVersion(changes: List<VersionChange>): Option<MasterSemanticVersion> {
