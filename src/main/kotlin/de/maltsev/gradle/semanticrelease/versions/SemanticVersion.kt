@@ -14,7 +14,7 @@ data class BranchSemanticVersion(
     private val commitHash: String
 ) : SemanticVersion() {
     override fun artifactVersion() = "$branchName.$commitHash"
-    override fun vscString() = toString()
+    override fun vscString() = artifactVersion()
 }
 
 data class MasterSemanticVersion(
@@ -39,7 +39,7 @@ data class MasterSemanticVersion(
     )
 
     override fun artifactVersion() = "$major.$minor.$patch"
-    override fun vscString() = "$prefix$major.$minor.$patch"
+    override fun vscString() = "$prefix${artifactVersion()}"
 }
 
 fun MasterSemanticVersion.nextVersion(changes: List<VersionChange>): Option<MasterSemanticVersion> {
