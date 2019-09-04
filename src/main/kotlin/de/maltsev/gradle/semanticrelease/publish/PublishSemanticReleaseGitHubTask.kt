@@ -1,5 +1,6 @@
 package de.maltsev.gradle.semanticrelease.publish
 
+import de.maltsev.gradle.semanticrelease.isOnTargetBranch
 import de.maltsev.gradle.semanticrelease.lazy
 import de.maltsev.gradle.semanticrelease.lazyList
 import de.maltsev.gradle.semanticrelease.releasenotes.releaseNotes
@@ -28,7 +29,7 @@ open class PublishSemanticReleaseGitHubTask : DefaultTask() {
     @TaskAction
     fun action() {
         val versionContext = version.get()
-        if (versionContext.hasNewVersion) {
+        if (versionContext.hasNewVersion && project.isOnTargetBranch()) {
             logger.lifecycle("Publishing version ${versionContext.version}.")
             val releaseNotes = versionContext.releaseNotes(changesGroups.get().toSet())
             logger.lifecycle("Release notes:\n$releaseNotes.")

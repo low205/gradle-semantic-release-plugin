@@ -35,8 +35,10 @@ class SemanticReleasePlugin : Plugin<Project> {
         val onTargetBranch = ciTool.currentBranchName() == extension.targetBranch.get()
         val inferOnNotTargetBranch = extension.inferVersion.get() == VersionInference.ALWAYS
         return if (!onTargetBranch && inferOnNotTargetBranch) {
+            project.extensions.extraProperties[IS_ON_TARGET] = false
             VersionInferTaskOnBranch(ciTool.currentBranchName(), vscTool)
         } else if (onTargetBranch) {
+            project.extensions.extraProperties[IS_ON_TARGET] = true
             VersionInferTaskOnTarget(vscTool)
         } else {
             project.logger.lifecycle("No version could be inferred on branch ${ciTool.currentBranchName()}." +
@@ -75,6 +77,7 @@ class SemanticReleasePlugin : Plugin<Project> {
     companion object {
         private const val SEMANTIC_PUBLISH = "semanticReleasePublish"
         private const val SEMANTIC_RELEASE = "semanticRelease"
-        internal const val HAS_NEW_SEMANTIC_VERSION = "hasNewSemanticVersion"
+        internal const val HAS_NEW_SEMANTIC_VERSION = "semanticReleaseHasNewSemanticVersion"
+        internal const val IS_ON_TARGET = "semanticReleaseIsOnTarget"
     }
 }

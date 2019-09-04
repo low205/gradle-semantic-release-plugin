@@ -109,6 +109,7 @@ By default project configured with:
     }
 
 #### Not on master?
+By default plugin infers version only on master. 
 
 On other than `master` plugin can infer branched version with `<branchName>.<lastCommitHash>` pattern. 
 
@@ -119,8 +120,21 @@ You can enable such inference by setting inferVersion configuration to ALWAYS:
         inferVersion.set(VersionInference.ALWAYS)
     }
 
-Of course `semanticReleasePublish` task will not run outside of `master`. 
+Of course `semanticReleasePublish` task will run only on `master`. 
 
+Also plugin will allow to use extension to check if your are on `master` branch.
+For example you would want to publish docker image from any branch, but publish artifacts only on `master`
+    
+    import de.maltsev.gradle.semanticrelease.isOnTargetBranch
+    import de.maltsev.gradle.semanticrelease.hasNewSemanticVersion
+    tasks {
+         "dockerBuildImage" {
+            onlyIf { hasNewSemanticVersion() }
+         }
+         "bintrayUpload"(BintrayUploadTask::class) {
+             onlyIf { hasNewSemanticVersion() && isOnTargetBranch() }
+         }        
+    }
 #### External deployment
 You can use versionFile task when you deploying publishing outside of gradle:
         
