@@ -97,7 +97,7 @@ class MarkdownReleaseNotesGeneratorTest : ShouldSpec() {
             ).releaseNotes(VersionChangeGroup.values().toSet())
 
             releaseNotes shouldBe """
-                ## v1.1.1 (2019-09-03)
+                ## v1.1.1 (${LocalDate.now()})
 
                 #### Bug Fixes
 
@@ -116,7 +116,7 @@ class MarkdownReleaseNotesGeneratorTest : ShouldSpec() {
             ).releaseNotes(VersionChangeGroup.values().toSet())
 
             releaseNotes shouldBe """
-                ## v1.1.1 (2019-09-03)
+                ## v1.1.1 (${LocalDate.now()})
 
                 #### Bug Fixes
 
@@ -135,7 +135,7 @@ class MarkdownReleaseNotesGeneratorTest : ShouldSpec() {
             ).releaseNotes(VersionChangeGroup.values().toSet())
 
             releaseNotes shouldBe """
-                ## v1.1.1 (2019-09-03)
+                ## v1.1.1 (${LocalDate.now()})
 
                 #### Features
 
@@ -154,7 +154,7 @@ class MarkdownReleaseNotesGeneratorTest : ShouldSpec() {
             ).releaseNotes(VersionChangeGroup.values().toSet())
 
             releaseNotes shouldBe """
-                ## v1.1.1 (2019-09-03)
+                ## v1.1.1 (${LocalDate.now()})
 
                 #### Features
 
@@ -177,7 +177,7 @@ class MarkdownReleaseNotesGeneratorTest : ShouldSpec() {
             ).releaseNotes(VersionChangeGroup.values().toSet())
 
             releaseNotes shouldBe """
-                ## v1.1.1 (2019-09-03)
+                ## v1.1.1 (${LocalDate.now()})
 
                 #### Breaking Changes
 
@@ -201,7 +201,7 @@ class MarkdownReleaseNotesGeneratorTest : ShouldSpec() {
             ).releaseNotes(VersionChangeGroup.values().toSet())
 
             releaseNotes shouldBe """
-                ## v1.1.1 (2019-09-03)
+                ## v1.1.1 (${LocalDate.now()})
 
                 #### Breaking Changes
 
