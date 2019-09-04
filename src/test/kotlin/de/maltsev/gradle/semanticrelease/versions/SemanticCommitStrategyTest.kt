@@ -5,8 +5,8 @@ import arrow.core.Some
 import de.maltsev.gradle.semanticrelease.vcs.VcsCommit
 import de.maltsev.gradle.semanticrelease.vcs.VcsCommitId
 import io.kotlintest.data.forall
-import io.kotlintest.specs.ShouldSpec
 import io.kotlintest.shouldBe
+import io.kotlintest.specs.ShouldSpec
 import io.kotlintest.tables.row
 
 class SemanticCommitStrategyTest : ShouldSpec() {
@@ -61,7 +61,7 @@ class SemanticCommitStrategyTest : ShouldSpec() {
             versionChange.descriptor shouldBe SemanticCommitMessage("some message", Some("feat"), None, Some("broken1\nbroken2\nbroken3\nbroken4"))
         }
 
-        should ("add multiline text from BREAKING CHANGE") {
+        should("add multiline text from BREAKING CHANGE") {
             val versionChange = VcsCommit(
                 commitId, """feat: some message 
                     |BREAKING CHANGE: broken1
