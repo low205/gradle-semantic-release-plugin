@@ -20,7 +20,7 @@ class VersionInferTaskOnBranch(
         val version = BranchSemanticVersion(branch, lastCommit.id.shortId)
 
         return VersionContext(
-            hasNewVersion = false,
+            hasNewVersion = true,
             version = version,
             changes = emptyList()
         )
