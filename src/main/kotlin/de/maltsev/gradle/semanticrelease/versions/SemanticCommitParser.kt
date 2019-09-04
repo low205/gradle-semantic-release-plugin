@@ -1,12 +1,14 @@
 package de.maltsev.gradle.semanticrelease.versions
 
+import arrow.core.None
 import arrow.core.Option
+import arrow.core.Some
 import arrow.core.getOrElse
 import arrow.core.toOption
 import java.util.regex.Pattern
 import java.util.regex.Pattern.DOTALL
 
-private val changeMessagePattern = Pattern.compile("^((?<type>\\w*)(\\((?<subType>.*)\\))?:)?(?<message>.*)$", DOTALL).toRegex()
+private val changeMessagePattern = Pattern.compile("^((?<type>[^()]+)(\\((?<subType>.+)\\))?.*:)?(?<message>.*)$", DOTALL).toRegex()
 private val breakingMessagePattern = Pattern.compile("BREAKING CHANGE(S?):?").toRegex()
 
 fun String.asSemanticCommitMessage(): SemanticCommitMessage {
@@ -18,7 +20,10 @@ fun String.asSemanticCommitMessage(): SemanticCommitMessage {
     val subType: Option<String> = matcher.flatMap { it["subType"].toOption() }.map { it.value.trim() }
     val message: String = matcher.flatMap { it["message"].toOption() }.map { it.value.trim() }.getOrElse { "" }
 
-    val breakingChangeMessage = Option.fromNullable(messageParts.getOrNull(1))
+    val breakingChangeMessage = when {
+        messageParts.size == 1 -> None
+        else -> Some(messageParts.drop(1).map(String::trim).filter(String::isNotEmpty).joinToString("\n"))
+    }
 
     return SemanticCommitMessage(
         message = message,
