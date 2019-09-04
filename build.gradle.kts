@@ -1,8 +1,8 @@
 import com.jfrog.bintray.gradle.BintrayExtension
 import com.jfrog.bintray.gradle.tasks.BintrayUploadTask
-//import de.maltsev.gradle.semanticrelease.VersionInference
-//import de.maltsev.gradle.semanticrelease.semanticRelease
-//import de.maltsev.gradle.semanticrelease.hasNewSemanticVersion
+import de.maltsev.gradle.semanticrelease.VersionInference
+import de.maltsev.gradle.semanticrelease.semanticRelease
+import de.maltsev.gradle.semanticrelease.hasNewSemanticVersion
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import java.util.Date
@@ -144,13 +144,23 @@ bintray {
 
 tasks {
     "bintrayUpload"(BintrayUploadTask::class) {
-//        onlyIf { hasNewSemanticVersion() }
+        onlyIf { hasNewSemanticVersion() }
     }
     "publishPlugins" {
-//        onlyIf { hasNewSemanticVersion() }
+        onlyIf { hasNewSemanticVersion() }
+    }
+    jacocoTestReport {
+        reports {
+            xml.isEnabled = true
+            html.isEnabled = false
+        }
+    }
+    "check" {
+        dependsOn(jacocoTestReport)
     }
 }
 
-//semanticRelease {
-//    inferVersion.set(VersionInference.ONLY_ON_TARGET)
-//}
+semanticRelease {
+    inferVersion.set(VersionInference.ONLY_ON_TARGET)
+}
+
