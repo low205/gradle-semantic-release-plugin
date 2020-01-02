@@ -8,7 +8,8 @@ internal class Travis(private val env: TravisEnvironment) : CIApi {
         return when {
             env.pullRequestBranch.isNotBlank() -> env.pullRequestBranch
             env.branch.isNotBlank() -> env.branch
-            else -> throw IllegalStateException("TRAVIS_PULL_REQUEST_BRANCH and TRAVIS_BRANCH cannot be blank in Travis environment")
+            else -> throw IllegalStateException("TRAVIS_PULL_REQUEST_BRANCH and TRAVIS_BRANCH cannot be blank " +
+                "in Travis environment")
         }
     }
 

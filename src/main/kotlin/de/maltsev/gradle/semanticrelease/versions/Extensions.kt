@@ -8,20 +8,35 @@ import arrow.core.toOption
 import java.util.regex.Pattern
 import java.util.regex.Pattern.DOTALL
 
-internal val changeMessagePattern = Pattern.compile("^((?<type>[^()]+)(\\((?<subType>.+)\\))?.*:)?(?<message>.*)$", DOTALL).toRegex()
-internal val breakingMessagePattern = Pattern.compile("BREAKING CHANGE(S?):?").toRegex()
+internal val changeMessagePattern =
+    Pattern.compile("^((?<type>[^()]+)(\\((?<subType>.+)\\))?.*:)?(?<message>.*)$", DOTALL).toRegex()
+internal val breakingMessagePattern =
+    Pattern.compile("BREAKING CHANGE(S?):?").toRegex()
 
 fun String.asSemanticCommitMessage(): SemanticCommitMessage {
     val messageParts: List<String> = this.split(breakingMessagePattern).map { it.trim() }
     val changeMessage = messageParts[0]
 
-    val matcher: Option<MatchGroupCollection> = changeMessagePattern.matchEntire(changeMessage).toOption().map { it.groups }
-    val type: Option<String> = matcher.flatMap { it["type"].toOption() }.map { it.value.trim() }
-    val subType: Option<String> = matcher.flatMap { it["subType"].toOption() }.map { it.value.trim() }
-    val message: String = matcher.flatMap { it["message"].toOption() }.map { it.value.trim() }.getOrElse { "" }
+    val matcher: Option<MatchGroupCollection> = changeMessagePattern
+        .matchEntire(changeMessage)
+        .toOption()
+        .map(MatchResult::groups)
 
-    val breakingChangeMessage = when {
-        messageParts.size == 1 -> None
+    val type: Option<String> = matcher
+        .flatMap { it["type"].toOption() }
+        .map { it.value.trim() }
+
+    val subType: Option<String> = matcher
+        .flatMap { it["subType"].toOption() }
+        .map { it.value.trim() }
+
+    val message: String = matcher
+        .flatMap { it["message"].toOption() }
+        .map { it.value.trim() }
+        .getOrElse { "" }
+
+    val breakingChangeMessage = when (messageParts.size) {
+        1 -> None
         else -> Some(messageParts.drop(1).map(String::trim).filter(String::isNotEmpty).joinToString("\n"))
     }
 
@@ -39,7 +54,9 @@ internal const val MAJOR_GROUP_NAME: String = "major"
 internal const val MINOR_GROUP_NAME: String = "minor"
 internal const val PATCH_GROUP_NAME: String = "patch"
 
-private val versionPattern: Regex = """(?<$PREFIX_GROUP_NAME>\w*)(?<$MAJOR_GROUP_NAME>\d+)\.(?<$MINOR_GROUP_NAME>\d+)\.(?<$PATCH_GROUP_NAME>\d+)""".toRegex()
+private val versionPattern: Regex =
+    """(?<$PREFIX_GROUP_NAME>\w*)(?<$MAJOR_GROUP_NAME>\d+)\.(?<$MINOR_GROUP_NAME>\d+)\.(?<$PATCH_GROUP_NAME>\d+)"""
+        .toRegex()
 
 fun String.asSemanticVersion(): MasterSemanticVersion {
     val match = versionPattern.matchEntire(this)

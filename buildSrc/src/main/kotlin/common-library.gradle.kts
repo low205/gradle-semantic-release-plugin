@@ -1,10 +1,9 @@
-import io.gitlab.arturbosch.detekt.detekt
+import io.gitlab.arturbosch.detekt.Detekt
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm")
     kotlin("kapt")
-    id("io.gitlab.arturbosch.detekt")
     id("org.jetbrains.dokka")
     jacoco
 }
@@ -61,6 +60,10 @@ tasks {
         }
     }
 
+    withType<Detekt> {
+        this.jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
     val ktlint by creating(JavaExec::class) {
         group = "verification"
         description = "Check Kotlin code style."
@@ -84,13 +87,4 @@ tasks {
     withType<Test> {
         useJUnitPlatform()
     }
-}
-
-val detektVersion: String by project
-
-detekt {
-    toolVersion = detektVersion
-    input = files("$rootDir/src/main/kotlin")
-    config = files("$rootDir/detekt-config.yml")
-    filters = ".*/resources/.*,.*/build/.*"
 }
